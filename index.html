@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#6f8fba" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icons/icon-192.png" />
+  <title>Familienplanner – Demo</title>
+  <style>
+    :root{
+      --bg:#f5f8fc;--card:#ffffff;--text:#2f3b4d;--muted:#748093;--accent:#5f7fae;
+      --accent2:#eaf1fb;--danger:#b66565;--warn:#b58b46;--ok:#6689a8;--line:#e1e8f1;
+      --shadow:0 10px 30px rgba(76,105,145,.10);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);letter-spacing:.005em;line-height:1.45;font-weight:400}
+    button,input,select,textarea{font:inherit}
+    .app{max-width:980px;margin:0 auto;min-height:100vh;padding:0 14px 90px}
+    header{position:sticky;top:0;z-index:20;background:rgba(245,247,244,.95);backdrop-filter:blur(10px);padding:14px 0 8px}
+    .topbar{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .brand{font-weight:600;font-size:1.25rem}
+    .profile{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);padding:7px 10px;border-radius:999px}
+    .avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent2);color:var(--accent);font-size:1.05rem}
+    .hero{background:linear-gradient(135deg,#6f8fba,#9bb3d2);color:white;border-radius:26px;padding:22px;margin:14px 0 20px;box-shadow:0 12px 30px rgba(80,110,150,.16)}
+    .hero h1{margin:0 0 6px;font-size:1.55rem;font-weight:600}.hero p{margin:0;opacity:.9;font-weight:400}
+    .score{font-size:2rem;font-weight:600;margin-top:14px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+    .card h2,.card h3{margin:0 0 12px;font-weight:600}
+    .section{margin:18px 0}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .section-head h2{margin:0;font-size:1.15rem;font-weight:600}
+    .btn{border:0;border-radius:14px;padding:10px 15px;cursor:pointer;background:var(--accent);color:#fff;font-weight:600;box-shadow:0 4px 10px rgba(95,127,174,.14)}
+    .btn.secondary{background:#edf3fb;color:#56749e}
+    .btn.danger{background:#f6dede;color:var(--danger)}
+    .btn.ghost{background:#f8fbff;color:#5b78a0;border:1px solid #dbe5f0}
+    .btn.small{padding:7px 10px;border-radius:10px;font-size:.9rem}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:0 5px 16px rgba(76,105,145,.06)}
+    .item-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .title{font-weight:600}.meta{color:var(--muted);font-size:.9rem;margin-top:4px}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+    .chip{font-size:.78rem;padding:5px 9px;border-radius:999px;background:#edf3fb;color:#58739a}
+    .chip.warn{background:#f8f1df;color:#917241}.chip.danger{background:#f7e7e7;color:#9d5656}.chip.ok{background:#e8f0f8;color:#5b7597}
+    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .tabs{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:30;box-shadow:0 -6px 20px rgba(76,105,145,.06)}
+    .tabbar{width:min(980px,100%);display:grid;grid-template-columns:repeat(6,1fr);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+    .tab{border:0;background:transparent;padding:8px 4px;color:var(--muted);cursor:pointer;font-size:.8rem}
+    .tab.active{color:var(--accent);font-weight:600}
+    .tab span{display:block;font-size:1.3rem}
+    .view{display:none}.view.active{display:block}
+    .empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px;background:#fbfcfe}
+    dialog{border:0;border-radius:18px;max-width:620px;width:calc(100% - 24px);padding:0;box-shadow:0 20px 80px rgba(0,0,0,.25)}
+    dialog::backdrop{background:rgba(0,0,0,.35)}
+    .modal{padding:18px}.modal h3{margin:0 0 14px}.form{display:grid;gap:12px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    label{font-size:.9rem;font-weight:500}.field{display:grid;gap:6px}
+    input,select,textarea{width:100%;border:1px solid #d7e1ed;border-radius:13px;padding:11px;background:#fbfdff;color:var(--text)}
+    textarea{min-height:88px;resize:vertical}
+    .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+    .toggle{display:flex;align-items:center;gap:8px}.toggle input{width:auto}
+    .notice{padding:11px 13px;border-radius:14px;background:#f4f7fb;color:#5e6d82;margin:8px 0;border:1px solid #e3eaf3}
+    .collision{background:#f8eaea;color:#925858}
+    .calendar-day{font-weight:800;margin-top:16px;margin-bottom:8px}
+    .mini{font-size:.85rem;color:var(--muted)}
+    .progress{height:10px;background:#e8eef6;border-radius:999px;overflow:hidden}.progress>div{height:100%;background:#7f9fc7}
+    .reward{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+    .game-box{height:220px;border-radius:18px;background:linear-gradient(#d9f2ff,#dff5d0);position:relative;overflow:hidden;border:1px solid var(--line)}
+    .animal{position:absolute;font-size:2.1rem;cursor:pointer;user-select:none}
+    .gamehud{display:flex;justify-content:space-between;margin-bottom:10px;font-weight:600}
+    @media(max-width:700px){.grid,.row{grid-template-columns:1fr}.app{padding-left:10px;padding-right:10px}.hero{border-radius:18px}}
+  b,strong{font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="topbar">
+      <div class="brand">🏡 Familienplanner</div>
+      <div class="profile"><div class="avatar">🏠</div><div><div style="font-weight:600">Familien-Demo</div><div class="mini">lokal gespeichert</div></div></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="todayView" class="view active"></section>
+    <section id="calendarView" class="view"></section>
+    <section id="tasksView" class="view"></section>
+    <section id="bonusView" class="view"></section>
+    <section id="pointsView" class="view"></section>
+    <section id="settingsView" class="view"></section>
+  </main>
+</div>
+
+<nav class="tabs">
+  <div class="tabbar">
+    <button class="tab active" data-view="todayView"><span>🏠</span>Heute</button>
+    <button class="tab" data-view="calendarView"><span>📅</span>Kalender</button>
+    <button class="tab" data-view="tasksView"><span>✅</span>Aufgaben</button>
+    <button class="tab" data-view="bonusView"><span>⭐</span>Bonus</button>
+    <button class="tab" data-view="pointsView"><span>🎯</span>Punkte</button>
+    <button class="tab" data-view="settingsView"><span>⚙️</span>Einstellungen</button>
+  </div>
+</nav>
+
+<dialog id="taskDialog"><form method="dialog" class="modal" id="taskForm">
+  <h3>Aufgabe anlegen / bearbeiten</h3>
+  <input type="hidden" id="taskId">
+  <div class="form">
+    <div class="field"><label>Titel</label><input id="taskTitle" required></div>
+    <div class="row">
+      <div class="field"><label>Kategorie</label><select id="taskCategory"></select></div>
+      <div class="field"><label>Punkte</label><input id="taskPoints" type="number" min="0" value="5"></div>
+    </div>
+    <div class="field"><label>Zuständig / Punkte für</label>
+      <select id="taskOwner">
+        <option>👩 Kathi</option><option>👨 Julian</option><option>🦊 Lotta</option><option>🐻 Matti</option><option>🐼 Pepe</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="field"><label>Fällig am</label><input id="taskDate" type="date" required></div>
+      <div class="field"><label>Uhrzeit</label><input id="taskTime" type="time"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Wiederholung</label>
+        <select id="taskRepeat">
+          <option value="none">keine</option><option value="daily">täglich</option><option value="weekly">wöchentlich</option><option value="monthly">monatlich</option>
+        </select>
+      </div>
+      <div class="field"><label>Typ</label>
+        <select id="taskType"><option value="normal">Pflichtaufgabe</option><option value="bonus">Bonusaufgabe</option></select>
+      </div>
+    </div>
+    <label class="toggle"><input id="taskUrgent" type="checkbox"> unaufschiebbar</label>
+    <div class="row">
+      <div class="field"><label>Mindestalter</label><input id="taskMinAge" type="number" min="0" max="99" value="6"></div>
+      <div class="field"><label>Schwierigkeit</label>
+        <select id="taskDifficulty"><option value="easy">leicht</option><option value="medium">mittel</option><option value="hard">anspruchsvoll</option></select>
+      </div>
+    </div>
+    <div class="field"><label>Selbstständigkeit / Sicherheit</label>
+      <select id="taskSupervision">
+        <option value="alone">alleine möglich</option>
+        <option value="help">mit Hilfe</option>
+        <option value="adult">nur mit Erwachsenem</option>
+        <option value="adultOnly">nicht für Kinder</option>
+      </select>
+    </div>
+    <div class="field"><label>Art der Care-Arbeit</label>
+      <select id="taskLoadType">
+        <option>Ausführung</option><option>Planung</option><option>Organisation</option><option>Mental Load</option>
+        <option>Prüfen</option><option>Nachbestellen</option><option>Nachhalten</option><option>Care</option>
+      </select>
+    </div>
+    <div class="field"><label>Notiz</label><textarea id="taskNote"></textarea></div>
+  </div>
+  <div class="modal-actions"><button class="btn ghost" value="cancel">Abbrechen</button><button type="button" class="btn" onclick="saveTask()">Speichern</button></div>
+</form></dialog>
+
+<dialog id="eventDialog"><form method="dialog" class="modal" id="eventForm">
+  <h3>Termin anlegen / bearbeiten</h3>
+  <input type="hidden" id="eventId">
+  <div class="form">
+    <div class="field"><label>Titel</label><input id="eventTitle" required></div>
+    <div class="row">
+      <div class="field"><label>Kategorie</label><select id="eventCategory"></select></div>
+      <div class="field"><label>Personen</label>
+        <select id="eventPeople" multiple size="5">
+          <option>👩 Kathi</option><option>👨 Julian</option><option>🦊 Lotta</option><option>🐻 Matti</option><option>🐼 Pepe</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Datum</label><input id="eventDate" type="date" required></div>
+      <div class="field"><label>Beginn</label><input id="eventStart" type="time" required></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Ende</label><input id="eventEnd" type="time" required></div>
+      <div class="field"><label>Vorbereitung</label>
+        <select id="eventPrep"><option value="none">keine</option><option value="gift">7 Tage vorher: Geschenk besorgen</option><option value="invite">7 Tage vorher: Einladungen verschicken</option></select>
+      </div>
+    </div>
+    <label class="toggle"><input id="eventWeather" type="checkbox"> wetterabhängig</label>
+    <div class="card" style="box-shadow:none;background:#f8fbff">
+      <div class="title">Aufgaben zu diesem Termin</div>
+      <label class="toggle" style="margin-top:8px"><input id="eventDriverTask" type="checkbox"> automatisch „Wer fährt?“ anlegen</label>
+      <div class="mini" style="margin-top:6px">Die zuständige Person wird über den Wochentag automatisch bestimmt. Für einzelne Termine kann sie überschrieben werden.</div>
+      <div class="row" style="margin-top:10px">
+        <div class="field">
+          <label>Hinbringen – zuständig</label>
+          <select id="eventDriveOverride">
+            <option value="">automatisch nach Tagesregel</option>
+            <option value="Kathi">👩 Kathi</option>
+            <option value="Julian">👨 Julian</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Abholen – zuständig</label>
+          <select id="eventPickupOverride">
+            <option value="">automatisch nach Tagesregel</option>
+            <option value="Kathi">👩 Kathi</option>
+            <option value="Julian">👨 Julian</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div class="field"><label>Zusätzliche Terminaufgabe <span class="mini">(optional)</span></label><input id="eventExtraTask" placeholder="z. B. Trikot einpacken"></div>
+        <div class="field"><label>Punkte</label><input id="eventExtraTaskPoints" type="number" min="0" value="0"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Freizeit-Vorlage <span class="mini">(optional)</span></label>
+        <select id="eventLeisurePreset" onchange="applyLeisurePreset()"><option value="">frei wählen</option></select>
+      </div>
+      <div class="field"><label>Freizeitkosten in Punkten <span class="mini">(nur Sport/Hobby + Erwachsene)</span></label>
+        <input id="eventLeisureCost" type="number" min="0" value="10">
+      </div>
+    </div>
+    <div id="collisionBox"></div>
+    <div class="field" id="wishlistField">
+      <label>Wunschliste / Geschenkideen <span class="mini">(eine Idee pro Zeile)</span></label>
+      <textarea id="eventWishlist" placeholder="z. B. Buch über Pferde&#10;Lego-Set&#10;Gutschein"></textarea>
+    </div>
+    <div class="row">
+      <div class="field"><label>Arbeitsdauer in Stunden <span class="mini">(optional)</span></label>
+        <input id="eventWorkHours" type="number" min="0" step="0.5" placeholder="z. B. 9.5">
+      </div>
+      <div class="field"><label>Arbeitstag-Ausgleich</label>
+        <div class="mini" style="padding-top:10px">Bei Kategorie „Arbeit“ wird die persönliche Schwelle geprüft: Kathi derzeit ab 7 h, Julian ab 8 h.</div>
+      </div>
+    </div>
+    <div class="field"><label>Notiz</label><textarea id="eventNote"></textarea></div>
+  </div>
+  <div class="modal-actions"><button class="btn ghost" value="cancel">Abbrechen</button><button type="button" class="btn" onclick="saveEvent()">Speichern</button></div>
+</form></dialog>
+
+<dialog id="doneDialog"><div class="modal">
+  <h3>Aufgabe erledigt</h3>
+  <div class="form">
+    <div class="field"><label>Kommentar zur Erledigung</label><textarea id="doneComment" placeholder="z. B. Futter fast leer"></textarea></div>
+    <label class="toggle"><input type="checkbox" id="followToggle"> Folgeaufgabe anlegen</label>
+    <div id="followFields" style="display:none">
+      <div class="field"><label>Folgeaufgabe</label><input id="followTitle" placeholder="z. B. Futter nachbestellen"></div>
+      <div class="row">
+        <div class="field"><label>Datum</label><input id="followDate" type="date"></div>
+        <div class="field"><label>Punkte</label><input id="followPoints" type="number" min="0" value="3"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-actions"><button class="btn ghost" onclick="document.getElementById('doneDialog').close()">Abbrechen</button><button class="btn" onclick="confirmDone()">Erledigung speichern</button></div>
+</div></dialog>
+
+<dialog id="shiftDialog"><div class="modal">
+  <h3>Aufgabe verschieben</h3>
+  <div class="notice">Diese Aufgabe darf genau einmal und maximal 24 Stunden verschoben werden.</div>
+  <div class="field"><label>Neue Fälligkeit</label><input id="shiftDateTime" type="datetime-local"></div>
+  <div class="modal-actions"><button class="btn ghost" onclick="document.getElementById('shiftDialog').close()">Abbrechen</button><button class="btn" onclick="confirmShift()">Verschieben</button></div>
+</div></dialog>
+
+<dialog id="gameDialog"><div class="modal">
+  <h3>🐍 Hof-Snake</h3>
+  <div class="gamehud"><span id="gameTimer">05:00</span><span>Futter: <b id="gameFeed">0</b> · Rekord: <b id="gameHighscore">0</b></span></div>
+  <div class="game-box" style="height:auto;padding:10px;background:#eef4fb">
+    <canvas id="snakeCanvas" width="320" height="320" style="width:100%;max-width:420px;aspect-ratio:1/1;display:block;margin:auto;border-radius:14px;background:#f8fbff;border:1px solid #dbe5f0"></canvas>
+  </div>
+  <div class="mini" style="margin-top:10px">Sammle Futter ein. Berührst du den Rand oder dich selbst, startet nur die Runde neu – die Spielzeit läuft weiter.</div>
+  <div style="display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center;margin-top:14px">
+    <span></span><button type="button" class="btn secondary" id="snakeUp">↑</button><span></span>
+    <button type="button" class="btn secondary" id="snakeLeft">←</button><button type="button" class="btn secondary" id="snakeDown">↓</button><button type="button" class="btn secondary" id="snakeRight">→</button>
+  </div>
+  <div class="modal-actions"><button class="btn ghost" onclick="stopGame()">Spiel beenden</button></div>
+</div></dialog>
+
+<script>
+const STORAGE_KEY = 'familienplanner_demo_v16_1_pointsfix';
+const categoriesTasks = ['Haushalt','Bauernhof','Pferde','Schafe','Hühner','Enten','Hasen','Katze','Hund','Garten','Hof','Schule/Kinder','Organisation','Vorstandsarbeit'];
+const categoriesEvents = ['Arbeit','Privat','Kinder','Familie','Sport/Hobby','Bauernhof','Vorstandsarbeit'];
+const careTemplates = [{"id": "care_1", "title": "Wochenspeiseplan erstellen", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_2", "title": "Essenswünsche der Familie abfragen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_3", "title": "Einkaufsliste erstellen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_4", "title": "Lebensmittelvorräte prüfen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_5", "title": "Kühlschrank auf ablaufende Lebensmittel prüfen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_6", "title": "Gefrierschrank-Bestand prüfen", "category": "Haushalt", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_7", "title": "Grundvorräte nachbestellen", "category": "Haushalt", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_8", "title": "Getränkevorrat prüfen und nachbestellen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_9", "title": "Obst und Pausensnacks auffüllen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_10", "title": "Brot / Backwaren organisieren", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Organisation"}, {"id": "care_11", "title": "Abendessen kochen", "category": "Haushalt", "points": 5, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_12", "title": "Mittagessen vorbereiten", "category": "Haushalt", "points": 5, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_13", "title": "Pausenbrote / Vesper vorbereiten", "category": "Schule/Kinder", "points": 4, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_14", "title": "Trinkflaschen füllen", "category": "Schule/Kinder", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_15", "title": "Essensreste verwerten / einplanen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_16", "title": "Leergut wegbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_17", "title": "Spülmaschine einräumen", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_18", "title": "Spülmaschine ausräumen", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_19", "title": "Arbeitsflächen Küche reinigen", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_20", "title": "Herd reinigen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_21", "title": "Backofen reinigen", "category": "Haushalt", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_22", "title": "Kühlschrank reinigen", "category": "Haushalt", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_23", "title": "Mülleimer reinigen", "category": "Haushalt", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_24", "title": "Biomüll rausbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_25", "title": "Restmüll rausbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_26", "title": "Papiermüll rausbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_27", "title": "Gelber Sack / Verpackungen rausbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_28", "title": "Müllkalender prüfen", "category": "Organisation", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_29", "title": "Altglas wegbringen", "category": "Haushalt", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_30", "title": "Böden saugen", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_31", "title": "Böden wischen", "category": "Haushalt", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_32", "title": "Bad reinigen", "category": "Haushalt", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_33", "title": "Toiletten reinigen", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_34", "title": "Waschbecken reinigen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_35", "title": "Dusche / Badewanne reinigen", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_36", "title": "Handtücher wechseln", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_37", "title": "Bettwäsche wechseln", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_38", "title": "Staub wischen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_39", "title": "Fenster putzen", "category": "Haushalt", "points": 8, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_40", "title": "Türklinken / Lichtschalter reinigen", "category": "Haushalt", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_41", "title": "Wäsche sortieren", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_42", "title": "Waschmaschine starten", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_43", "title": "Wäsche aufhängen / Trockner", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_44", "title": "Wäsche zusammenlegen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_45", "title": "Wäsche in Schränke räumen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_46", "title": "Flecken vorbehandeln", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_47", "title": "Kleidung nach Größen prüfen", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_48", "title": "Zu kleine Kinderkleidung aussortieren", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_49", "title": "Fehlende Kleidung nachkaufen", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_50", "title": "Schuhe auf Größe / Zustand prüfen", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_51", "title": "Saisonkleidung vorbereiten", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_52", "title": "Winterkleidung / Schneesachen prüfen", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_53", "title": "Regenkleidung prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_54", "title": "Sportkleidung waschen", "category": "Schule/Kinder", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_55", "title": "Schulranzen prüfen", "category": "Schule/Kinder", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_56", "title": "Hausaufgaben / Schulinfos prüfen", "category": "Schule/Kinder", "points": 3, "repeat": "daily", "urgent": false, "loadType": "Mental Load"}, {"id": "care_57", "title": "Elternbriefe lesen", "category": "Schule/Kinder", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_58", "title": "Schul-App / E-Mails prüfen", "category": "Schule/Kinder", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Mental Load"}, {"id": "care_59", "title": "Unterschriften / Rückläufe erledigen", "category": "Schule/Kinder", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_60", "title": "Klassenkasse / Beiträge überweisen", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_61", "title": "Ausflüge / Projekttage vorbereiten", "category": "Schule/Kinder", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_62", "title": "Schulmaterial nachkaufen", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_63", "title": "Stifte / Kleber / Hefte prüfen", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_64", "title": "Sportbeutel vollständig prüfen", "category": "Schule/Kinder", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_65", "title": "Musik-/Instrumentensachen prüfen", "category": "Schule/Kinder", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_66", "title": "Ferienbetreuung recherchieren", "category": "Schule/Kinder", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_67", "title": "Ferienbetreuung buchen", "category": "Schule/Kinder", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_68", "title": "Betreuungszeiten abstimmen", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_69", "title": "Kindertermine der Woche prüfen", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_70", "title": "Fahrdienste für Kindertermine abstimmen", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_71", "title": "Mitfahrgelegenheiten organisieren", "category": "Schule/Kinder", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Organisation"}, {"id": "care_72", "title": "Kindergeburtstage der Freunde im Blick behalten", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_73", "title": "Arzttermine prüfen / vereinbaren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_74", "title": "Zahnarzt-Kontrollen planen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_75", "title": "U-Untersuchungen / Vorsorge prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_76", "title": "Impfstatus / Impftermine prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_77", "title": "Rezepte rechtzeitig organisieren", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_78", "title": "Apotheke / Hausapotheke auffüllen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_79", "title": "Hausapotheke auf Ablaufdaten prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_80", "title": "Krankenversicherung-Unterlagen ablegen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_81", "title": "Brille / Sehtest-Termine im Blick behalten", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_82", "title": "Friseurtermine Kinder organisieren", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_83", "title": "Geburtstage des Monats prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_84", "title": "Geschenkideen sammeln", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_85", "title": "Geschenke besorgen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_86", "title": "Geschenke verpacken", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_87", "title": "Geburtstagskarten schreiben", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_88", "title": "Einladungen erstellen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_89", "title": "Einladungen verschicken", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_90", "title": "Rückmeldungen auf Einladungen nachhalten", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_91", "title": "Familienfeiern terminlich koordinieren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_92", "title": "Besuche bei Familie / Freunden planen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_93", "title": "Danksagungen / Rückmeldungen verschicken", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_94", "title": "Rechnungen prüfen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_95", "title": "Rechnungen bezahlen", "category": "Organisation", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_96", "title": "Kontoauszüge / Abbuchungen prüfen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_97", "title": "Versicherungen prüfen", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_98", "title": "Verträge / Kündigungsfristen prüfen", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_99", "title": "Abos prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_100", "title": "Familienbudget aktualisieren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_101", "title": "Taschengeld / Kinderkonto prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_102", "title": "Steuerunterlagen sammeln", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_103", "title": "Garantiebelege / Quittungen ablegen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_104", "title": "Putzmittel-Bestand prüfen", "category": "Haushalt", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_105", "title": "Hygieneartikel nachbestellen", "category": "Haushalt", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_106", "title": "Toilettenpapier / Küchenrolle prüfen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_107", "title": "Leuchtmittel / Batterien prüfen", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_108", "title": "Kleine Reparaturen sammeln / priorisieren", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_109", "title": "Handwerkertermine organisieren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_110", "title": "Wartungen / Prüfintervalle im Blick behalten", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_111", "title": "Rauchmelder prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_112", "title": "Feuerlöscher / Erste-Hilfe-Material prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_113", "title": "Fahrzeuge tanken / laden", "category": "Organisation", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_114", "title": "Fahrzeugtermine TÜV / Inspektion prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_115", "title": "Scheibenwaschmittel / Öl prüfen", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_116", "title": "Pferde morgens füttern", "category": "Pferde", "points": 5, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_117", "title": "Pferde abends füttern", "category": "Pferde", "points": 5, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_118", "title": "Pferdetränken kontrollieren", "category": "Pferde", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Prüfen"}, {"id": "care_119", "title": "Pferdekoppel kontrollieren", "category": "Pferde", "points": 3, "repeat": "daily", "urgent": false, "loadType": "Prüfen"}, {"id": "care_120", "title": "Pferdefutter-Bestand prüfen", "category": "Pferde", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_121", "title": "Pferdefutter nachbestellen", "category": "Pferde", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_122", "title": "Schafe füttern", "category": "Schafe", "points": 4, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_123", "title": "Schaftränke kontrollieren", "category": "Schafe", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Prüfen"}, {"id": "care_124", "title": "Weide / Zaun Schafe kontrollieren", "category": "Schafe", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_125", "title": "Hühner morgens füttern", "category": "Hühner", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_126", "title": "Hühner abends versorgen", "category": "Hühner", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_127", "title": "Eier einsammeln", "category": "Hühner", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_128", "title": "Hühnerstall sauber machen", "category": "Hühner", "points": 7, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_129", "title": "Hühnerfutter-Bestand prüfen", "category": "Hühner", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_130", "title": "Enten füttern", "category": "Enten", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_131", "title": "Entenwasser wechseln / prüfen", "category": "Enten", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_132", "title": "Entenbereich reinigen", "category": "Enten", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_133", "title": "Hasen füttern", "category": "Hasen", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_134", "title": "Hasenwasser prüfen", "category": "Hasen", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_135", "title": "Hasenstall reinigen", "category": "Hasen", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_136", "title": "Heu-/Strohbestand prüfen", "category": "Bauernhof", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_137", "title": "Heu / Stroh nachbestellen", "category": "Bauernhof", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_138", "title": "Tierarzttermine im Blick behalten", "category": "Bauernhof", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_139", "title": "Impfungen / Entwurmung Tiere prüfen", "category": "Bauernhof", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_140", "title": "Tiermedikamente / Pflegebedarf prüfen", "category": "Bauernhof", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_141", "title": "Katze füttern", "category": "Katze", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_142", "title": "Katzenklo reinigen", "category": "Katze", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_143", "title": "Katzenfutter nachbestellen", "category": "Katze", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_144", "title": "Hund füttern", "category": "Hund", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_145", "title": "Hund Gassi morgens", "category": "Hund", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_146", "title": "Hund Gassi abends", "category": "Hund", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_147", "title": "Hundefutter nachbestellen", "category": "Hund", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_148", "title": "Zecken-/Flohschutz Hund/Katze prüfen", "category": "Bauernhof", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_149", "title": "Garten gießen", "category": "Garten", "points": 4, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_150", "title": "Pflanzen auf Schädlingsbefall prüfen", "category": "Garten", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_151", "title": "Gemüse ernten", "category": "Garten", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_152", "title": "Saatgut / Pflanzenbedarf planen", "category": "Garten", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_153", "title": "Gartengeräte prüfen", "category": "Garten", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_154", "title": "Rasen mähen", "category": "Garten", "points": 6, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_155", "title": "Hof kehren", "category": "Hof", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_156", "title": "Müll / Material im Hof wegräumen", "category": "Hof", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_157", "title": "Winterdienst-Material prüfen", "category": "Hof", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_158", "title": "Schnee räumen / streuen", "category": "Hof", "points": 7, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_159", "title": "Ferientermine im Kalender eintragen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_160", "title": "Urlaub grob planen", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_161", "title": "Unterkunft buchen", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_162", "title": "Packliste erstellen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_163", "title": "Reisedokumente prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_164", "title": "Reiseapotheke prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_165", "title": "Haustierbetreuung für Urlaub organisieren", "category": "Bauernhof", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_166", "title": "Ferien-/Urlaubsübergabe Haus und Tiere planen", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_167", "title": "Weihnachtsgeschenke planen", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_168", "title": "Advent / Feiertage terminlich koordinieren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_169", "title": "Ostern / Feiertage vorbereiten", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_170", "title": "Schuljahresstart vorbereiten", "category": "Schule/Kinder", "points": 7, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_171", "title": "Schuljahresende / Zeugnisse / Materialien organisieren", "category": "Schule/Kinder", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_172", "title": "Familienwoche gemeinsam durchsprechen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_173", "title": "Konflikte / offene Themen in der Familie ansprechen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Care"}, {"id": "care_174", "title": "Zeit für jedes Kind individuell einplanen", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Care"}, {"id": "care_175", "title": "Besondere Belastungen der Kinder im Blick behalten", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_176", "title": "Kontakt zu Schule / Lehrkräften bei Bedarf aufnehmen", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_177", "title": "Freundschaften / soziale Termine der Kinder im Blick behalten", "category": "Schule/Kinder", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_178", "title": "Familienkalender der kommenden 14 Tage prüfen", "category": "Organisation", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_179", "title": "Terminkollisionen frühzeitig klären", "category": "Organisation", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_180", "title": "Arbeitskalender mit Familienkalender abgleichen", "category": "Organisation", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_181", "title": "Verantwortlichkeiten für kommende Woche verteilen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_182", "title": "Vorstandstermine der Woche prüfen", "category": "Vorstandsarbeit", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_183", "title": "Vorstandsmails bearbeiten", "category": "Vorstandsarbeit", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_184", "title": "Offene Vorstandspunkte nachhalten", "category": "Vorstandsarbeit", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_185", "title": "Unterlagen für Vorstandssitzung vorbereiten", "category": "Vorstandsarbeit", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_186", "title": "Beschlüsse / To-dos aus Vorstandssitzung übertragen", "category": "Vorstandsarbeit", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_187", "title": "Fristen aus Vorstandsarbeit prüfen", "category": "Vorstandsarbeit", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}];
+
+const personIcons = {
+  'Kathi':'👩',
+  'Julian':'👨',
+  'Lotta':'🦊',
+  'Matti':'🐻',
+  'Pepe':'🐼'
+};
+function iconForPerson(name){ return personIcons[name] || '👤'; }
+function labelPerson(name){ return `${iconForPerson(name)} ${name}`; }
+
+const children = {
+  'Lotta': {birth:'2016-11-03'},
+  'Matti': {birth:'2018-12-31'},
+  'Pepe': {birth:'2024-02-19'}
+};
+function ageOn(dateStr,birthStr){
+  const d=new Date((dateStr||todayISO())+'T12:00:00');
+  const b=new Date(birthStr+'T12:00:00');
+  let age=d.getFullYear()-b.getFullYear();
+  const beforeBirthday=(d.getMonth()<b.getMonth())||(d.getMonth()===b.getMonth()&&d.getDate()<b.getDate());
+  if(beforeBirthday)age--;
+  return Math.max(0,age);
+}
+function childAge(name,dateStr=todayISO()){return children[name]?ageOn(dateStr,children[name].birth):99}
+function isChild(name){return !!children[name]}
+function supervisionLabel(v){
+  return {'alone':'alleine möglich','help':'mit Hilfe','adult':'nur mit Erwachsenem','adultOnly':'nicht für Kinder'}[v]||v;
+}
+function difficultyLabel(v){
+  return {'easy':'leicht','medium':'mittel','hard':'anspruchsvoll'}[v]||v;
+}
+function ageRuleForTemplate(t){
+  const title=(t.title||'').toLowerCase();
+  const cat=t.category||'';
+  let minAge=6, supervision='alone', difficulty='easy';
+
+  // Kleinkindgeeignete Mitmach-Aufgaben
+  if(/spielzeug|wäsche in den wäschekorb|servietten|schuhe.*platz|kleine gießkanne|eigenes geschirr/.test(title)){
+    minAge=2; supervision='help'; difficulty='easy';
+  }
+  // Typische Aufgaben ab ca. 6 Jahren
+  if(/tisch|spülmaschine|wäsche sortieren|trinkflasche|schulranzen|sportbeutel|eier einsammeln|garten gießen|hof kehren/.test(title)){
+    minAge=6; supervision='alone'; difficulty='easy';
+  }
+  // Mehr Planung / Selbstorganisation
+  if(/speiseplan|einkaufsliste|vorräte prüfen|wäsche zusammenlegen|müll rausbringen|schulmaterial|geschenke verpacken/.test(title)){
+    minAge=9; supervision='alone'; difficulty='medium';
+  }
+  // Mental Load / Verwaltung bleibt zunächst erwachsen
+  if(['Mental Load','Planung','Organisation','Nachhalten'].includes(t.loadType) &&
+     /versicherung|vertrag|rechnung|budget|steuer|arzttermin|ferienbetreuung|handwerker|vorstand|arbeitskalender/.test(title)){
+    minAge=18; supervision='adultOnly'; difficulty='hard';
+  }
+  // Tier-Sicherheitslogik
+  if(['Pferde','Schafe'].includes(cat)){
+    minAge=Math.max(minAge,9); supervision='adult'; difficulty='medium';
+  }
+  if(['Hühner','Enten','Hasen'].includes(cat)){
+    minAge=Math.max(minAge,6);
+    if(/stall.*sauber|reinigen/.test(title)){minAge=Math.max(minAge,8);supervision='help';difficulty='medium';}
+  }
+  if(['Hund','Katze'].includes(cat)){
+    minAge=Math.max(minAge,6);
+    if(/gassi/.test(title)){minAge=Math.max(minAge,9);supervision='adult';difficulty='medium';}
+  }
+  if(t.urgent && /füttern|tränke|wasser/.test(title) && ['Pferde','Schafe'].includes(cat)){
+    supervision='adult';
+  }
+  return {minAge,supervision,difficulty};
+}
+function taskSuitableForChild(t,childName){
+  if(!children[childName])return true;
+  const age=childAge(childName,t.date||todayISO());
+  const min=t.minAge??0;
+  return age>=min && t.supervision!=='adultOnly';
+}
+
+
+function allTaskCategories(){
+  return [...new Set([...categoriesTasks,...(state.settings.customTaskCategories||[])])];
+}
+function allEventCategories(){
+  return [...new Set([...categoriesEvents,...(state.settings.customEventCategories||[])])];
+}
+function refreshCategorySelects(){
+  const currentTask=document.getElementById('taskCategory')?.value;
+  const currentEvent=document.getElementById('eventCategory')?.value;
+  fillSelect('taskCategory',allTaskCategories());
+  fillSelect('eventCategory',allEventCategories());
+  if(currentTask && allTaskCategories().includes(currentTask))taskCategory.value=currentTask;
+  if(currentEvent && allEventCategories().includes(currentEvent))eventCategory.value=currentEvent;
+}
+
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function plusDays(dateStr, days){const d=new Date(dateStr+'T12:00:00');d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
+function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36)}
+
+const people = ['Kathi','Julian','Lotta','Matti','Pepe'];
+const demoSeed = {
+  pointsByPerson:{'Kathi':20,'Julian':15,'Lotta':27,'Matti':20,'Pepe':5},
+  tasks:[
+    {id:uid(),title:'Pferde füttern',category:'Pferde',points:5,date:todayISO(),time:'07:30',repeat:'daily',type:'normal',urgent:true,done:false,shifted:false,note:'',owner:'Erwachsener 1'},
+    {id:uid(),title:'Hühner füttern',category:'Hühner',points:3,date:todayISO(),time:'08:00',repeat:'daily',type:'normal',urgent:true,done:false,shifted:false,note:'',owner:'Matti'},
+    {id:uid(),title:'Hühnerstall sauber machen',category:'Hühner',points:8,date:plusDays(todayISO(),2),time:'10:00',repeat:'weekly',type:'normal',urgent:false,done:false,shifted:false,note:'',owner:'Lotta'},
+    {id:uid(),title:'Hof kehren',category:'Hof',points:6,date:todayISO(),time:'16:00',repeat:'none',type:'bonus',urgent:false,done:false,shifted:false,note:'',owner:'Pepe'}
+  ],
+  events:[
+    {id:uid(),title:'Matti Fußball',category:'Kinder',people:['Matti'],date:todayISO(),start:'16:30',end:'18:00',weather:true,prep:'none',note:'',leisureCost:0,chargedAdults:[]},
+    {id:uid(),title:'Geburtstag Oma',category:'Familie',people:['Kathi','Julian','Lotta','Matti','Pepe'],date:plusDays(todayISO(),3),start:'18:00',end:'21:00',weather:false,prep:'gift',note:'',leisureCost:0,chargedAdults:[]}
+  ],
+  history:[],
+  game:{feed:0,lastPlayed:null,highscore:0},
+  settings:{
+    childGameCost:20,
+    gameMinutes:5,
+    defaultLeisureCost:10,
+    defaultTaskPoints:5,
+    leisurePrices:{
+      'Joggen':5,
+      'Sportverein':10,
+      'Abend mit Freunden':20,
+      'Ungestörte Freizeit':25
+    }
+  }
+};
+
+let state = loadState();
+let activeTaskId = null;
+let shiftTaskId = null;
+let gameInterval = null;
+let gameRemaining = 300;
+
+function loadState(){
+  const raw=localStorage.getItem(STORAGE_KEY);
+  const s=raw?JSON.parse(raw):structuredClone(demoSeed);
+  if(!s.game)s.game={feed:0,lastPlayed:null,highscore:0};
+  if(s.game.highscore==null)s.game.highscore=0;
+  if(!s.pointsByPerson){
+    s.pointsByPerson={'Kathi':20,'Julian':15,'Lotta':27,'Matti':s.points??20,'Pepe':5};
+    delete s.points;
+  }
+  s.tasks.forEach(t=>{
+    if(t.owner==='Kind 1')t.owner='Matti';
+    if(t.owner==='Kind 2')t.owner='Lotta';
+    if(t.owner==='Kind 3')t.owner='Pepe';
+    if(t.owner==='Erwachsener 1')t.owner='Kathi';
+    if(t.owner==='Erwachsener 2')t.owner='Julian';
+    if(!t.owner)t.owner='Lotta';
+    if(t.minAge==null){const r=ageRuleForTemplate(t);t.minAge=r.minAge;t.difficulty=r.difficulty;t.supervision=r.supervision;}
+  });
+  if(s.pointsByPerson['Kind 1']!=null){s.pointsByPerson['Matti']=s.pointsByPerson['Kind 1'];delete s.pointsByPerson['Kind 1'];}
+  if(s.pointsByPerson['Kind 2']!=null){s.pointsByPerson['Lotta']=s.pointsByPerson['Kind 2'];delete s.pointsByPerson['Kind 2'];}
+  if(s.pointsByPerson['Kind 3']!=null){s.pointsByPerson['Pepe']=s.pointsByPerson['Kind 3'];delete s.pointsByPerson['Kind 3'];}
+  s.events.forEach(e=>{if(e.leisureCost==null)e.leisureCost=0;if(!e.chargedAdults)e.chargedAdults=[];if(!e.wishlist)e.wishlist=[];if(!e.compensatedAdults)e.compensatedAdults=[];if(e.workHours==null)e.workHours=0});
+  if(!s.settings){
+    s.settings={
+      childGameCost:20,
+      gameMinutes:5,
+      defaultLeisureCost:10,
+      defaultTaskPoints:5,
+      leisurePrices:{'Joggen':5,'Sportverein':10,'Abend mit Freunden':20,'Ungestörte Freizeit':25}
+    };
+  }
+  if(s.settings.childGameCost==null)s.settings.childGameCost=20;
+  if(s.settings.gameMinutes==null)s.settings.gameMinutes=5;
+  if(s.settings.defaultLeisureCost==null)s.settings.defaultLeisureCost=10;
+  if(s.settings.defaultTaskPoints==null)s.settings.defaultTaskPoints=5;
+  if(!s.settings.leisurePrices)s.settings.leisurePrices={'Joggen':5,'Sportverein':10,'Abend mit Freunden':20,'Ungestörte Freizeit':25};
+  if(s.pointsByPerson['Erwachsener 1']!=null && s.pointsByPerson['Kathi']==null){s.pointsByPerson['Kathi']=s.pointsByPerson['Erwachsener 1'];delete s.pointsByPerson['Erwachsener 1'];}
+  if(s.pointsByPerson['Erwachsener 2']!=null && s.pointsByPerson['Julian']==null){s.pointsByPerson['Julian']=s.pointsByPerson['Erwachsener 2'];delete s.pointsByPerson['Erwachsener 2'];}
+  s.tasks.forEach(t=>{if(t.owner==='Erwachsener 1')t.owner='Kathi';if(t.owner==='Erwachsener 2')t.owner='Julian';});
+  s.events.forEach(e=>{e.people=(e.people||[]).map(p=>p==='Erwachsener 1'?'Kathi':p==='Erwachsener 2'?'Julian':p==='Kind 1'?'Matti':p==='Kind 2'?'Lotta':p==='Kind 3'?'Pepe':p);e.chargedAdults=(e.chargedAdults||[]).map(p=>p==='Erwachsener 1'?'Kathi':p==='Erwachsener 2'?'Julian':p);});
+  if(!s.settings.childResponsibility)s.settings.childResponsibility={'1':'Kathi','2':'Kathi','3':'Julian','4':'Kathi','5':'Julian','6':'','0':''};
+  if(s.settings.autoDriverTask==null)s.settings.autoDriverTask=true;
+  if(s.settings.driverTaskPoints==null)s.settings.driverTaskPoints=0;
+  if(!s.settings.responsibilityOverrides)s.settings.responsibilityOverrides={};
+  if(!s.settings.pickupResponsibility)s.settings.pickupResponsibility={'1':'Julian','2':'Julian','3':'Kathi','4':'Julian','5':'Kathi','6':'','0':''};
+  if(!s.settings.pickupOverrides)s.settings.pickupOverrides={};
+  if(!s.settings.mentalLoadPoints)s.settings.mentalLoadPoints={'Mental Load':4,'Planung':4,'Organisation':4,'Prüfen':3,'Nachbestellen':3,'Nachhalten':4,'Care':4,'Ausführung':3};
+  ['Kathi','Julian','Lotta','Matti','Pepe'].forEach(p=>{
+    if(s.pointsByPerson[p]==null)s.pointsByPerson[p]=0;
+  });
+  if(!s.settings.workdayCompensation)s.settings.workdayCompensation={enabled:true,points:5,thresholds:{'Kathi':7,'Julian':8}};
+  if(!s.settings.workdayCompensation.thresholds)s.settings.workdayCompensation.thresholds={'Kathi':7,'Julian':8};
+  if(!s.settings.customTaskCategories)s.settings.customTaskCategories=[];
+  if(!s.settings.customEventCategories)s.settings.customEventCategories=[];
+  s.tasks.forEach(t=>{if(!t.loadType)t.loadType='Ausführung';});
+  s.events.forEach(e=>{if(!e.wishlist)e.wishlist=[];if(!e.compensatedAdults)e.compensatedAdults=[];if(e.workHours==null)e.workHours=0;});
+  return s;
+}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));renderAll()}
+function resetDemo(){if(confirm('Alle lokalen Demodaten zurücksetzen?')){localStorage.removeItem(STORAGE_KEY);state=structuredClone(demoSeed);saveState()}}
+
+function fmtDate(s){
+  const d=new Date(s+'T12:00:00');
+  return d.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'});
+}
+function taskSort(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}
+
+function renderAll(){renderToday();renderTasks();renderBonus();renderCalendar();renderPoints();renderSettings()}
+
+function renderToday(){
+  const tasks=state.tasks.filter(t=>!t.done&&t.type==='normal'&&t.date===todayISO()).sort(taskSort);
+  const events=state.events.filter(e=>e.date===todayISO()).sort((a,b)=>a.start.localeCompare(b.start));
+  document.getElementById('todayView').innerHTML=`
+    <div class="hero"><h1>${greeting()} 👋</h1><p>${new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'})}</p>
+    <div class="score">⭐ Familienpunkte</div><div class="mini" style="color:#fff;opacity:.92;margin-top:3px">Gemeinsam planen · Aufgaben teilen · Freizeit verdienen</div>
+    <div class="mini" style="color:#fff;opacity:.96">${people.map(p=>`${iconForPerson(p)} ${state.pointsByPerson[p]} P`).join(' · ')}</div></div>
+    <div class="grid">
+      <div class="card"><h3>📅 Termine heute</h3>${events.length?events.map(eventHTML).join(''):'<div class="empty">Heute keine Termine</div>'}</div>
+      <div class="card"><h3>✅ Aufgaben heute</h3>${tasks.length?tasks.map(taskHTML).join(''):'<div class="empty">Heute keine offenen Aufgaben</div>'}</div>
+    </div>
+    <div class="section"><div class="section-head"><h2>Schnellzugriff</h2></div><div class="actions">
+      <button class="btn" onclick="openTask()">+ Aufgabe</button><button class="btn secondary" onclick="openEvent()">+ Termin</button><button class="btn ghost" onclick="resetDemo()">Demo zurücksetzen</button>
+    </div></div>`;
+}
+function greeting(){const h=new Date().getHours();return h<11?'Guten Morgen':h<18?'Hallo':'Guten Abend'}
+
+function taskHTML(t){
+  return `<div class="item">
+    <div class="item-top"><div><div class="title">${esc(t.title)}</div><div class="meta">${fmtDate(t.date)} ${t.time||''}</div></div><b>+${t.points}</b></div>
+    <div class="chips"><span class="chip">${esc(t.category)}</span><span class="chip">${esc(t.loadType||'Ausführung')}</span><span class="chip">${esc(labelPerson(t.owner||'Lotta'))}</span>${t.minAge!=null?`<span class="chip">ab ${t.minAge} J.</span>`:''}${t.supervision?`<span class="chip">${esc(supervisionLabel(t.supervision))}</span>`:''}${(()=>{const r=ageRuleForTemplate(t);return `<span class="chip">ab ${r.minAge} J.</span><span class="chip">${esc(supervisionLabel(r.supervision))}</span>`})()}${t.urgent?'<span class="chip danger">unaufschiebbar</span>':''}${t.repeat!=='none'?'<span class="chip">↻ '+repeatLabel(t.repeat)+'</span>':''}${t.shifted?'<span class="chip warn">1× verschoben</span>':''}</div>
+    ${t.note?`<div class="notice" style="margin-top:10px;white-space:pre-line">${esc(t.note)}</div>`:''}
+    <div class="actions">
+      <button class="btn small" onclick="openDone('${t.id}')">✓ Erledigt</button>
+      ${!t.urgent&&!t.shifted?`<button class="btn secondary small" onclick="openShift('${t.id}')">↪ Verschieben</button>`:''}
+      <button class="btn ghost small" onclick="openTask('${t.id}')">Bearbeiten</button>
+      <button class="btn danger small" onclick="deleteTask('${t.id}')">Löschen</button>
+    </div></div>`;
+}
+function eventHTML(e){
+  return `<div class="item"><div class="item-top"><div><div class="title">${esc(e.title)}</div><div class="meta">${fmtDate(e.date)} · ${e.start}–${e.end}</div></div></div>
+    <div class="chips"><span class="chip">${esc(e.category)}</span>${e.weather?'<span class="chip">🌦 wetterabhängig</span>':''}${e.category==='Sport/Hobby'&&e.leisureCost?`<span class="chip warn">🏃 ${e.leisureCost} P Freizeit</span>`:''}${e.category==='Arbeit'&&e.workHours?`<span class="chip">💼 ${e.workHours} h Arbeit</span>`:''}${e.compensatedAdults?.length?`<span class="chip ok">+${state.settings.workdayCompensation.points} P Ausgleich</span>`:''}</div>
+    <div class="meta">${e.people.map(p=>esc(labelPerson(p))).join(', ')}</div>
+    ${e.wishlist?.length?`<div class="mini" style="margin-top:8px">🎁 Wunschliste: ${e.wishlist.map(esc).join(' · ')}</div>`:''}
+    ${isChildRelatedEvent(e)?`<div class="chips">
+      <span class="chip">🚗 Hinbringen: ${esc(eventDriveResponsible(e)||'nicht festgelegt')}</span>
+      <span class="chip">🏁 Abholen: ${esc(eventPickupResponsible(e)||'nicht festgelegt')}</span>
+      ${(e.driveOverride||e.pickupOverride)?'<span class="chip warn">Termin-Ausnahme</span>':''}
+      ${(state.settings.responsibilityOverrides?.[e.date]||state.settings.pickupOverrides?.[e.date])?'<span class="chip warn">Tages-Tausch</span>':''}
+    </div>`:''}
+    ${linkedTasks(e.id).length?`<div style="margin-top:10px">${linkedTasks(e.id).map(t=>`<div class="mini">☐ ${esc(t.title)} · ${esc(labelPerson(t.owner))}</div>`).join('')}</div>`:''}
+    <div class="actions"><button class="btn ghost small" onclick="openEvent('${e.id}')">Bearbeiten</button><button class="btn danger small" onclick="deleteEvent('${e.id}')">Löschen</button></div></div>`;
+}
+
+function renderTasks(){
+  const normal=state.tasks.filter(t=>t.type==='normal'&&!t.done).sort(taskSort);
+  document.getElementById('tasksView').innerHTML=`<div class="section"><div class="section-head"><h2>Aufgaben</h2><div class="actions"><button class="btn secondary" onclick="openLibrary()">🧺 Aufgabensammlung</button><button class="btn" onclick="openTask()">+ Aufgabe</button></div></div>
+    <div class="list">${normal.length?normal.map(taskHTML).join(''):'<div class="empty">Keine offenen Aufgaben</div>'}</div></div>`;
+}
+function renderBonus(){
+  const bonus=state.tasks.filter(t=>t.type==='bonus'&&!t.done).sort(taskSort);
+  const childCards=['Lotta','Matti','Pepe'].map(name=>{
+    const age=childAge(name);
+    const existing=bonus.filter(t=>taskSuitableForChild(t,name));
+    const suggestions=careTemplates
+      .map(t=>({...t,...ageRuleForTemplate(t)}))
+      .filter(t=>age>=t.minAge&&t.supervision!=='adultOnly')
+      .filter(t=>!['Mental Load','Planung','Organisation','Nachhalten'].includes(t.loadType)||age>=9)
+      .slice(0,6);
+    return `<div class="card" style="margin-bottom:12px">
+      <h3>${esc(labelPerson(name))} · ${age} Jahre</h3>
+      <div class="mini" style="margin-bottom:10px">Altersgerechte Vorschläge – Eltern können jede Einstufung anpassen.</div>
+      <div class="chips" style="margin-bottom:10px">
+        ${suggestions.map(s=>`<button type="button" class="btn secondary small" onclick="useSuggestedTask('${s.id}','${name}')">${esc(s.title)}</button>`).join('')}
+      </div>
+      ${existing.length?`<div class="mini">${existing.length} vorhandene passende Bonusaufgabe(n)</div>`:'<div class="mini">Noch keine offenen Bonusaufgaben zugeordnet.</div>'}
+    </div>`;
+  }).join('');
+  document.getElementById('bonusView').innerHTML=`<div class="section">
+    <div class="section-head"><h2>⭐ Bonusaufgaben</h2><button class="btn" onclick="openTask(null,'bonus')">+ Bonusaufgabe</button></div>
+    ${childCards}
+    <h3 style="margin-top:18px">Offene Bonusaufgaben</h3>
+    <div class="list">${bonus.length?bonus.map(taskHTML).join(''):'<div class="empty">Keine Bonusaufgaben verfügbar</div>'}</div>
+  </div>`;
+}
+function useSuggestedTask(templateId,childName){
+  const t=careTemplates.find(x=>x.id===templateId);
+  if(!t)return;
+  openTask(null,'bonus');
+  taskTitle.value=t.title;
+  taskCategory.value=t.category;
+  taskPoints.value=(state.settings.mentalLoadPoints?.[t.loadType]??t.points);
+  taskRepeat.value=t.repeat;
+  taskUrgent.checked=!!t.urgent;
+  taskLoadType.value=t.loadType;
+  const r=ageRuleForTemplate(t);
+  taskMinAge.value=r.minAge;
+  taskDifficulty.value=r.difficulty;
+  taskSupervision.value=r.supervision;
+  taskOwner.value=labelPerson(childName);
+  taskNote.value=`Altersgerechter Vorschlag für ${childName} · ${r.minAge}+ · ${supervisionLabel(r.supervision)}`;
+}
+function renderCalendar(){
+  const grouped={};
+  state.events.slice().sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start)).forEach(e=>(grouped[e.date]??=[]).push(e));
+  let html=`<div class="section"><div class="section-head"><h2>Kalender</h2><button class="btn" onclick="openEvent()">+ Termin</button></div>
+  <div class="notice">🏃 <b>Freizeitpunkte:</b> Termine der Kategorie „Sport/Hobby“, die einem Erwachsenen zugeordnet werden, ziehen die hinterlegten Punkte von dessen persönlichem Freizeitkonto ab.</div>`;
+  if(!Object.keys(grouped).length) html+='<div class="empty">Keine Termine</div>';
+  for(const [d,items] of Object.entries(grouped)){html+=`<div class="calendar-day">${fmtDate(d)}</div><div class="list">${items.map(eventHTML).join('')}</div>`}
+  html+='</div>';document.getElementById('calendarView').innerHTML=html;
+}
+
+function renderCareAnalytics(){
+  const doneTasks=state.tasks.filter(t=>t.done);
+  const types=[...new Set(doneTasks.map(t=>t.loadType||'Ausführung'))];
+  if(!doneTasks.length)return '<div class="empty">Noch keine erledigten Care-Aufgaben</div>';
+  const byPerson=people.map(p=>{
+    const mine=doneTasks.filter(t=>t.owner===p);
+    const pts=mine.reduce((sum,t)=>sum+(t.points||0),0);
+    return `<div class="item" style="padding:10px;margin-bottom:8px">
+      <div class="item-top"><div><div class="title">${esc(labelPerson(p))}</div>
+      <div class="meta">${mine.length} erledigte Aufgaben · ${pts} Punkte</div></div></div>
+      <div class="chips">${types.map(type=>{
+        const n=mine.filter(t=>(t.loadType||'Ausführung')===type).length;
+        return n?`<span class="chip">${esc(type)}: ${n}</span>`:'';
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+  return byPerson;
+}
+
+function renderPoints(){
+  const goal=state.settings.childGameCost;
+  const mins=state.settings.gameMinutes;
+  const rows=people.map(p=>{
+    const pts=state.pointsByPerson[p]||0;
+    const childFlag=isChild(p);
+    const pct=Math.min(100,(pts/Math.max(goal,1))*100);
+    return `<div class="card" style="margin-bottom:12px">
+      <div class="reward"><div><div class="title">${esc(labelPerson(p))}</div><div class="score">⭐ ${pts}</div></div>
+      ${childFlag?`<button class="btn" ${pts<goal?'disabled style="opacity:.45"':''} onclick="startGame('${p}')">🎮 ${mins} Min spielen</button>`:'<span class="chip">Freizeitkonto</span>'}</div>
+      ${childFlag?`<div class="progress" style="margin-top:14px"><div style="width:${pct}%"></div></div><div class="mini" style="margin-top:6px">${pts}/${goal} Punkte bis zur Spielzeit</div>`:
+      `<div class="mini" style="margin-top:8px">Sport-/Freizeittermine können aus diesem Guthaben bezahlt werden.</div>`}
+    </div>`;
+  }).join('');
+  document.getElementById('pointsView').innerHTML=`<div class="section"><div class="section-head"><h2>Punkte & Freizeit</h2></div>
+  ${rows}
+  <div class="card"><h3>🎮 Hof-Snake für die Kinder</h3><div>Gesammeltes Futter: <b>${state.game.feed}</b></div><div class="mini" style="margin-top:6px">Ab ${state.settings.childGameCost} Punkten können ${state.settings.gameMinutes} Minuten Spielzeit eingelöst werden. Der Spielstand wird gespeichert.</div><div class="mini">Der Spielstand bleibt lokal erhalten.</div></div>
+  
+  <div class="card" style="margin-top:14px">
+    <h3>Care- & Mental-Load-Auswertung</h3>
+    <div class="mini" style="margin-bottom:10px">Erledigte Care-Arbeit nach Art und Person.</div>
+    ${renderCareAnalytics()}
+  </div>
+<div class="card" style="margin-top:14px"><h3>Historie</h3>${state.history.length?state.history.slice().reverse().slice(0,20).map(h=>`<div class="meta">• ${esc(h)}</div>`).join(''):'<div class="empty">Noch keine Aktivitäten</div>'}</div></div>`;
+}
+
+
+function openLibrary(){
+  const dlg=document.getElementById('libraryDialog');
+  const catEl=document.getElementById('libraryCategory');
+  const searchEl=document.getElementById('librarySearch');
+  const cats=[...new Set(careTemplates.map(t=>t.category))].sort((a,b)=>a.localeCompare(b,'de'));
+  catEl.innerHTML='<option value="">alle Kategorien</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join('');
+  searchEl.value='';
+  catEl.value='';
+  renderLibrary();
+  dlg.showModal();
+}
+function renderLibrary(){
+  const searchEl=document.getElementById('librarySearch');
+  const catEl=document.getElementById('libraryCategory');
+  const countEl=document.getElementById('libraryCount');
+  const listEl=document.getElementById('libraryList');
+  if(!searchEl||!catEl||!countEl||!listEl)return;
+  const q=(searchEl.value||'').trim().toLowerCase();
+  const cat=catEl.value||'';
+  const rows=careTemplates.filter(t=>{
+    const hay=`${t.title} ${t.category} ${t.loadType}`.toLowerCase();
+    return (!q||hay.includes(q))&&(!cat||t.category===cat);
+  });
+  countEl.textContent=`${rows.length} Vorlagen gefunden`;
+  listEl.innerHTML=rows.map(t=>`
+    <div class="item">
+      <div class="item-top">
+        <div>
+          <div class="title">${esc(t.title)}</div>
+          <div class="chips">
+            <span class="chip">${esc(t.category)}</span>
+            <span class="chip">${esc(t.loadType)}</span>
+            ${t.repeat!=='none'?`<span class="chip">↻ ${repeatLabel(t.repeat)}</span>`:''}
+            ${t.minAge!=null?`<span class="chip">ab ${t.minAge} J.</span>`:''}${t.supervision?`<span class="chip">${esc(supervisionLabel(t.supervision))}</span>`:''}${t.urgent?'<span class="chip danger">unaufschiebbar</span>':''}
+          </div>
+        </div>
+        <div style="text-align:right"><div>+${state.settings.mentalLoadPoints?.[t.loadType] ?? t.points} P</div></div>
+      </div>
+      <div class="actions"><button class="btn secondary small" onclick="useCareTemplate('${t.id}')">Vorlage übernehmen</button></div>
+    </div>`).join('') || '<div class="empty">Keine passende Vorlage gefunden</div>';
+}
+function useCareTemplate(id){
+  const t=careTemplates.find(x=>x.id===id);
+  if(!t)return;
+  document.getElementById('libraryDialog').close();
+  openTask();
+  taskTitle.value=t.title;
+  taskCategory.value=t.category;
+  taskPoints.value=(state.settings.mentalLoadPoints?.[t.loadType] ?? t.points);
+  taskRepeat.value=t.repeat;
+  taskUrgent.checked=!!t.urgent;
+  taskLoadType.value=t.loadType;
+  const rule=ageRuleForTemplate(t);
+  taskMinAge.value=rule.minAge;
+  taskDifficulty.value=rule.difficulty;
+  taskSupervision.value=rule.supervision;
+  taskNote.value=`Vorlage aus Care-/Mental-Load-Sammlung · ${t.loadType}`;
+}
+
+function openTask(id=null,type='normal'){
+  const t=id?state.tasks.find(x=>x.id===id):null;
+  taskId.value=t?.id||'';taskTitle.value=t?.title||'';taskCategory.value=t?.category||'Haushalt';taskPoints.value=t?.points??state.settings.defaultTaskPoints;
+  taskDate.value=t?.date||todayISO();taskTime.value=t?.time||'';taskRepeat.value=t?.repeat||'none';taskType.value=t?.type||type;taskUrgent.checked=!!t?.urgent;taskNote.value=t?.note||'';taskOwner.value=(t?.owner?labelPerson(t.owner):'🦊 Lotta');taskMinAge.value=t?.minAge??6;taskDifficulty.value=t?.difficulty||'easy';taskSupervision.value=t?.supervision||'alone';
+  taskDialog.showModal();
+}
+function saveTask(){
+  if(!taskTitle.value.trim()||!taskDate.value)return alert('Bitte Titel und Datum eintragen.');
+  const obj={id:taskId.value||uid(),title:taskTitle.value.trim(),category:taskCategory.value,points:+taskPoints.value||0,date:taskDate.value,time:taskTime.value,repeat:taskRepeat.value,type:taskType.value,urgent:taskUrgent.checked,note:taskNote.value,owner:taskOwner.value.replace(/^[^A-Za-zÄÖÜäöü]+\s*/,''),loadType:taskLoadType.value,minAge:+taskMinAge.value||0,difficulty:taskDifficulty.value,supervision:taskSupervision.value,done:false,shifted:false};
+  const i=state.tasks.findIndex(t=>t.id===obj.id);
+  if(i>=0)obj.done=state.tasks[i].done,obj.shifted=state.tasks[i].shifted,state.tasks[i]=obj; else state.tasks.push(obj);
+  state.history.push(`Aufgabe „${obj.title}“ gespeichert`);
+  taskDialog.close();saveState();
+}
+function deleteTask(id){if(confirm('Aufgabe wirklich löschen?')){state.tasks=state.tasks.filter(t=>t.id!==id);saveState()}}
+
+
+function isBirthdayLike(title, category){
+  return (title||'').toLowerCase().includes('geburtstag') || category==='Familie';
+}
+function updateWishlistVisibility(){
+  const wf=document.getElementById('wishlistField');
+  if(!wf)return;
+  const show=isBirthdayLike(document.getElementById('eventTitle').value,document.getElementById('eventCategory').value);
+  wf.style.display=show?'grid':'none';
+  if(show && document.getElementById('eventPrep').value==='none'){
+    document.getElementById('eventPrep').value='gift';
+  }
+}
+
+function openEvent(id=null){
+  const e=id?state.events.find(x=>x.id===id):null;
+  eventId.value=e?.id||'';eventTitle.value=e?.title||'';eventCategory.value=e?.category||'Privat';eventDate.value=e?.date||todayISO();eventStart.value=e?.start||'12:00';eventEnd.value=e?.end||'13:00';eventWeather.checked=!!e?.weather;eventPrep.value=e?.prep||'none';eventNote.value=e?.note||'';document.getElementById('eventWorkHours').value=e?.workHours??'';document.getElementById('eventWishlist').value=(e?.wishlist||[]).join('\n');eventWishlist.value=(e?.wishlist||[]).join('\n');eventLeisureCost.value=e?.leisureCost??state.settings.defaultLeisureCost;
+  const existingLinked=e?linkedTasks(e.id):[];
+  eventDriverTask.checked=e?existingLinked.some(t=>['driver','drive','pickup'].includes(t.eventTaskType)):(state.settings.autoDriverTask&&eventCategory.value==='Kinder');
+  eventExtraTask.value=e?(existingLinked.find(t=>t.eventTaskType==='extra')?.title||''):'';
+  eventExtraTaskPoints.value=e?(existingLinked.find(t=>t.eventTaskType==='extra')?.points||0):0;
+  eventDriveOverride.value=e?.driveOverride||e?.responsibleOverride||'';
+  eventPickupOverride.value=e?.pickupOverride||'';
+  eventLeisurePreset.innerHTML='<option value="">frei wählen</option>'+Object.entries(state.settings.leisurePrices||{}).map(([n,v])=>`<option value="${v}">${esc(n)} (${v} P)</option>`).join('');
+  eventLeisurePreset.value='';
+  [...eventPeople.options].forEach(o=>{const raw=o.value.replace(/^[^A-Za-zÄÖÜäöü]+\s*/,'');o.selected=e?.people?.includes(raw)||false});collisionBox.innerHTML='';updateWishlistVisibility();eventDialog.showModal();
+}
+
+function isChildRelatedEvent(e){return e.category==='Kinder'||(e.people||[]).some(p=>isChild(p))}
+function weekdayDriveResponsible(dateStr){
+  if(state.settings.responsibilityOverrides?.[dateStr]) return state.settings.responsibilityOverrides[dateStr];
+  const day=String(new Date(dateStr+'T12:00:00').getDay());
+  return state.settings.childResponsibility?.[day]||'';
+}
+function weekdayPickupResponsible(dateStr){
+  if(state.settings.pickupOverrides?.[dateStr]) return state.settings.pickupOverrides[dateStr];
+  const day=String(new Date(dateStr+'T12:00:00').getDay());
+  return state.settings.pickupResponsibility?.[day]||'';
+}
+function eventDriveResponsible(e){return e.driveOverride || weekdayDriveResponsible(e.date) || ''}
+function eventPickupResponsible(e){return e.pickupOverride || weekdayPickupResponsible(e.date) || ''}
+function linkedTasks(eventId){return state.tasks.filter(t=>t.linkedEventId===eventId&&!t.done)}
+function removeAutoLinkedTasks(eventId){state.tasks=state.tasks.filter(t=>!(t.linkedEventId===eventId&&t.autoFromEvent))}
+function syncEventTasks(eventObj,extraTitle='',extraPoints=0,createDriver=false){
+  removeAutoLinkedTasks(eventObj.id);
+  const driveOwner=eventDriveResponsible(eventObj)||'Kathi';
+  const pickupOwner=eventPickupResponsible(eventObj)||'Julian';
+
+  if(createDriver&&isChildRelatedEvent(eventObj)){
+    state.tasks.push({
+      id:uid(),title:`${eventObj.title} – hinbringen`,category:'Schule/Kinder',
+      points:state.settings.driverTaskPoints||0,date:eventObj.date,time:eventObj.start,
+      repeat:'none',type:'normal',urgent:true,done:false,shifted:false,
+      note:`Automatisch aus Termin „${eventObj.title}“ erstellt`,owner:driveOwner,
+      linkedEventId:eventObj.id,autoFromEvent:true,eventTaskType:'drive'
+    });
+    state.tasks.push({
+      id:uid(),title:`${eventObj.title} – abholen`,category:'Schule/Kinder',
+      points:state.settings.driverTaskPoints||0,date:eventObj.date,time:eventObj.end,
+      repeat:'none',type:'normal',urgent:true,done:false,shifted:false,
+      note:`Automatisch aus Termin „${eventObj.title}“ erstellt`,owner:pickupOwner,
+      linkedEventId:eventObj.id,autoFromEvent:true,eventTaskType:'pickup'
+    });
+  }
+
+  if(extraTitle.trim()){
+    state.tasks.push({
+      id:uid(),title:extraTitle.trim(),category:'Schule/Kinder',points:+extraPoints||0,
+      date:eventObj.date,time:eventObj.start,repeat:'none',type:'normal',urgent:false,
+      done:false,shifted:false,note:`Terminaufgabe zu „${eventObj.title}“`,
+      owner:driveOwner,linkedEventId:eventObj.id,autoFromEvent:true,eventTaskType:'extra'
+    });
+  }
+}
+
+function applyLeisurePreset(){if(eventLeisurePreset.value!=='')eventLeisureCost.value=eventLeisurePreset.value}
+
+document.getElementById('eventTitle').addEventListener('input',updateWishlistVisibility);
+document.getElementById('eventCategory').addEventListener('change',updateWishlistVisibility);
+
+function selectedPeople(){return [...eventPeople.selectedOptions].map(o=>o.value.replace(/^[^A-Za-zÄÖÜäöü]+\s*/,''))}
+eventCategory.addEventListener('change',()=>{if(!eventId.value&&state.settings.autoDriverTask&&eventCategory.value==='Kinder')eventDriverTask.checked=true;});
+eventPeople.addEventListener('change',()=>{if(!eventId.value&&state.settings.autoDriverTask&&selectedPeople().some(p=>isChild(p)))eventDriverTask.checked=true;});
+function detectCollision(candidate){
+  const adults=candidate.people.filter(p=>['Kathi','Julian'].includes(p));
+  if(!adults.length)return [];
+  return state.events.filter(e=>e.id!==candidate.id&&e.date===candidate.date&&e.people.some(p=>adults.includes(p))&&candidate.start<e.end&&candidate.end>e.start);
+}
+function saveEvent(){
+  if(!eventTitle.value.trim()||!eventDate.value||!eventStart.value||!eventEnd.value)return alert('Bitte Titel, Datum, Beginn und Ende eintragen.');
+  if(eventEnd.value<=eventStart.value)return alert('Ende muss nach Beginn liegen.');
+  const existing=state.events.find(e=>e.id===eventId.value);
+  const obj={id:eventId.value||uid(),title:eventTitle.value.trim(),category:eventCategory.value,people:selectedPeople(),date:eventDate.value,start:eventStart.value,end:eventEnd.value,weather:eventWeather.checked,prep:eventPrep.value,note:eventNote.value,workHours:+document.getElementById('eventWorkHours').value||0,leisureCost:+eventLeisureCost.value||0,chargedAdults:existing?.chargedAdults||[],compensatedAdults:existing?.compensatedAdults||[],driveOverride:eventDriveOverride.value||'',pickupOverride:eventPickupOverride.value||'',wishlist:eventWishlist.value.split('\n').map(x=>x.trim()).filter(Boolean),wishlist:document.getElementById('eventWishlist').value.split('\n').map(x=>x.trim()).filter(Boolean)};
+  const collisions=detectCollision(obj);
+  if(collisions.length){
+    collisionBox.innerHTML=`<div class="notice collision"><b>Terminkollision:</b> ${collisions.map(c=>esc(c.title)).join(', ')}. Bei Erwachsenen wird diese Demo den Termin nicht speichern.</div>`;
+    return;
+  }
+  const adultsForLeisure=obj.category==='Sport/Hobby'?obj.people.filter(p=>['Kathi','Julian'].includes(p)):[];
+  const newlyCharged=adultsForLeisure.filter(p=>!obj.chargedAdults.includes(p));
+  const removedAdults=obj.chargedAdults.filter(p=>!adultsForLeisure.includes(p));
+  for(const p of newlyCharged){
+    if((state.pointsByPerson[p]||0)<obj.leisureCost){
+      collisionBox.innerHTML=`<div class="notice collision"><b>Nicht genug Freizeitpunkte:</b> ${esc(p)} hat nur ${state.pointsByPerson[p]||0} Punkte, benötigt werden ${obj.leisureCost}.</div>`;
+      return;
+    }
+  }
+  for(const p of newlyCharged){state.pointsByPerson[p]-=obj.leisureCost;obj.chargedAdults.push(p);state.history.push(`${p}: ${obj.leisureCost} Punkte für Freizeit „${obj.title}“ eingelöst`);}
+  for(const p of removedAdults){state.pointsByPerson[p]+=existing?.leisureCost||0;obj.chargedAdults=obj.chargedAdults.filter(x=>x!==p);state.history.push(`${p}: Freizeitpunkte aus geändertem Termin „${obj.title}“ zurückgebucht`);}
+  if(existing && existing.category==='Sport/Hobby' && obj.category==='Sport/Hobby' && existing.leisureCost!==obj.leisureCost){
+    for(const p of obj.chargedAdults){
+      const delta=obj.leisureCost-existing.leisureCost;
+      if(delta>0 && (state.pointsByPerson[p]||0)<delta){
+        collisionBox.innerHTML=`<div class="notice collision"><b>Nicht genug Punkte:</b> ${esc(p)} kann die zusätzlichen ${delta} Punkte nicht bezahlen.</div>`;
+        return;
+      }
+      state.pointsByPerson[p]-=delta;
+    }
+  }
+  
+  // Ausgleich für lange Arbeitstage
+  const wc=state.settings.workdayCompensation||{enabled:true,points:5,thresholds:{'Kathi':7,'Julian':8}};
+  const workAdults=(obj.category==='Arbeit')?obj.people.filter(p=>['Kathi','Julian'].includes(p)):[];
+  const eligibleAdults=wc.enabled ? workAdults.filter(p=>obj.workHours >= (wc.thresholds?.[p] ?? 9)) : [];
+  const newCompensated=eligibleAdults.filter(p=>!obj.compensatedAdults.includes(p));
+  const noLongerCompensated=(obj.compensatedAdults||[]).filter(p=>!eligibleAdults.includes(p));
+
+  newCompensated.forEach(p=>{
+    state.pointsByPerson[p]=(state.pointsByPerson[p]||0)+wc.points;
+    obj.compensatedAdults.push(p);
+    state.history.push(`${p}: +${wc.points} Punkte Ausgleich für langen Arbeitstag (${obj.workHours} h; Schwelle ${wc.thresholds?.[p] ?? 9} h)`);
+  });
+  noLongerCompensated.forEach(p=>{
+    state.pointsByPerson[p]=Math.max(0,(state.pointsByPerson[p]||0)-wc.points);
+    obj.compensatedAdults=obj.compensatedAdults.filter(x=>x!==p);
+    state.history.push(`${p}: Arbeitstag-Ausgleich zurückgebucht`);
+  });
+
+  const i=state.events.findIndex(e=>e.id===obj.id);if(i>=0)state.events[i]=obj;else state.events.push(obj);
+  syncEventTasks(obj,eventExtraTask.value,eventExtraTaskPoints.value,eventDriverTask.checked);
+  if(obj.prep!=='none'){
+    const isGift=obj.prep==='gift';
+    const title=isGift?`Geschenk besorgen für ${obj.title}`:`Einladungen verschicken für ${obj.title}`;
+    const wishlistText=isGift
+      ? ((obj.wishlist&&obj.wishlist.length) ? `Wunschliste:\n- ${obj.wishlist.join('\n- ')}` : 'Keine Wunschliste hinterlegt')
+      : '';
+    state.tasks.push({
+      id:uid(),
+      title,
+      category:'Organisation',
+      points:4,
+      date:plusDays(obj.date,-7),
+      time:'18:00',
+      repeat:'none',
+      type:'normal',
+      urgent:false,
+      done:false,
+      shifted:false,
+      note:`Automatisch aus Termin „${obj.title}“ erstellt${wishlistText?`
+
+${wishlistText}`:''}`,
+      owner:'Kathi',
+      loadType:'Organisation'
+    });
+  }
+  state.history.push(`Termin „${obj.title}“ gespeichert`);
+  eventDialog.close();saveState();
+}
+function deleteEvent(id){if(confirm('Termin wirklich löschen?')){
+  const e=state.events.find(e=>e.id===id);
+
+  if(e?.compensatedAdults?.length){
+    const pts=state.settings.workdayCompensation?.points||5;
+    e.compensatedAdults.forEach(p=>{
+      state.pointsByPerson[p]=Math.max(0,(state.pointsByPerson[p]||0)-pts);
+      state.history.push(`${p}: Arbeitstag-Ausgleich wegen gelöschtem Termin zurückgebucht`);
+    });
+  }
+  if(e?.category==='Sport/Hobby'&&e.leisureCost){
+    (e.chargedAdults||[]).forEach(p=>{state.pointsByPerson[p]=(state.pointsByPerson[p]||0)+e.leisureCost;state.history.push(`${p}: ${e.leisureCost} Freizeitpunkte wegen gelöschtem Termin „${e.title}“ zurückgebucht`)});
+  }
+  state.tasks=state.tasks.filter(t=>t.linkedEventId!==id);
+  state.events=state.events.filter(e=>e.id!==id);saveState()
+}}
+
+function openDone(id){activeTaskId=id;doneComment.value='';followToggle.checked=false;followFields.style.display='none';followTitle.value='';followDate.value=plusDays(todayISO(),1);followPoints.value=3;doneDialog.showModal()}
+followToggle.addEventListener('change',()=>followFields.style.display=followToggle.checked?'block':'none');
+function confirmDone(){
+  const t=state.tasks.find(t=>t.id===activeTaskId);if(!t)return;
+  t.done=true;state.pointsByPerson[t.owner]=(state.pointsByPerson[t.owner]||0)+t.points;
+  state.history.push(`${t.owner}: „${t.title}“ erledigt (+${t.points} Punkte)${doneComment.value.trim()?` – ${doneComment.value.trim()}`:''}`);
+  if(followToggle.checked&&followTitle.value.trim()){
+    state.tasks.push({id:uid(),title:followTitle.value.trim(),category:t.category,points:+followPoints.value||0,date:followDate.value||plusDays(todayISO(),1),time:'',repeat:'none',type:'normal',urgent:false,done:false,shifted:false,note:`Folgeaufgabe aus „${t.title}“`,owner:t.owner});
+  }
+  if(t.repeat!=='none'){
+    let next=t.date;
+    if(t.repeat==='daily')next=plusDays(t.date,1);
+    if(t.repeat==='weekly')next=plusDays(t.date,7);
+    if(t.repeat==='monthly'){const d=new Date(t.date+'T12:00:00');d.setMonth(d.getMonth()+1);next=d.toISOString().slice(0,10)}
+    state.tasks.push({...t,id:uid(),date:next,done:false,shifted:false});
+  }
+  doneDialog.close();saveState();
+}
+
+function openShift(id){
+  const t=state.tasks.find(t=>t.id===id);if(!t||t.urgent||t.shifted)return;
+  shiftTaskId=id;shiftDateTime.value=`${t.date}T${t.time||'12:00'}`;shiftDialog.showModal();
+}
+function confirmShift(){
+  const t=state.tasks.find(t=>t.id===shiftTaskId);if(!t)return;
+  const old=new Date(`${t.date}T${t.time||'12:00'}`), neu=new Date(shiftDateTime.value);
+  const diff=(neu-old)/36e5;
+  if(diff<0||diff>24)return alert('Die neue Fälligkeit muss innerhalb der nächsten 24 Stunden liegen.');
+  t.date=shiftDateTime.value.slice(0,10);t.time=shiftDateTime.value.slice(11,16);t.shifted=true;
+  state.history.push(`„${t.title}“ einmalig verschoben`);
+  shiftDialog.close();saveState();
+}
+
+let snakeTimer=null;
+let snakeLoop=null;
+let snake=[];
+let snakeDir={x:1,y:0};
+let nextSnakeDir={x:1,y:0};
+let snakeFood={x:8,y:8};
+let snakeScore=0;
+const snakeGrid=16;
+
+function startGame(person='Kind 1'){
+  const cost=state.settings.childGameCost;
+  const mins=state.settings.gameMinutes;
+  if((state.pointsByPerson[person]||0)<cost)return;
+  state.pointsByPerson[person]-=cost;
+  state.history.push(`${person}: ${cost} Punkte für ${mins} Minuten Spielzeit eingelöst`);
+  saveState();
+  gameRemaining=mins*60;
+  snakeScore=0;
+  resetSnakeRound();
+  document.getElementById('gameFeed').textContent='0';
+  document.getElementById('gameHighscore').textContent=String(state.game.highscore||0);
+  updateTimer();
+  gameDialog.showModal();
+  drawSnakeGame();
+  if(snakeTimer)clearInterval(snakeTimer);
+  if(snakeLoop)clearInterval(snakeLoop);
+  snakeTimer=setInterval(()=>{
+    gameRemaining--;
+    updateTimer();
+    if(gameRemaining<=0)stopGame(true);
+  },1000);
+  snakeLoop=setInterval(stepSnakeGame,180);
+}
+
+function updateTimer(){
+  const m=String(Math.floor(gameRemaining/60)).padStart(2,'0');
+  const s=String(gameRemaining%60).padStart(2,'0');
+  document.getElementById('gameTimer').textContent=`${m}:${s}`;
+}
+
+function setSnakeDirection(x,y){
+  if(x===-snakeDir.x&&y===-snakeDir.y)return;
+  nextSnakeDir={x,y};
+}
+
+function resetSnakeRound(){
+  snake=[{x:5,y:8},{x:4,y:8},{x:3,y:8}];
+  snakeDir={x:1,y:0};
+  nextSnakeDir={x:1,y:0};
+  placeSnakeFood();
+}
+
+function placeSnakeFood(){
+  do{
+    snakeFood={x:Math.floor(Math.random()*snakeGrid),y:Math.floor(Math.random()*snakeGrid)};
+  }while(snake.some(s=>s.x===snakeFood.x&&s.y===snakeFood.y));
+}
+
+function stepSnakeGame(){
+  snakeDir=nextSnakeDir;
+  const head={x:snake[0].x+snakeDir.x,y:snake[0].y+snakeDir.y};
+  const hitWall=head.x<0||head.y<0||head.x>=snakeGrid||head.y>=snakeGrid;
+  const hitSelf=snake.some(s=>s.x===head.x&&s.y===head.y);
+  if(hitWall||hitSelf){
+    resetSnakeRound();
+    drawSnakeGame();
+    return;
+  }
+  snake.unshift(head);
+  if(head.x===snakeFood.x&&head.y===snakeFood.y){
+    snakeScore++;
+    state.game.feed=(state.game.feed||0)+1;
+    state.game.highscore=Math.max(state.game.highscore||0,snakeScore);
+    document.getElementById('gameFeed').textContent=String(snakeScore);
+    document.getElementById('gameHighscore').textContent=String(state.game.highscore);
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+    placeSnakeFood();
+  }else{
+    snake.pop();
+  }
+  drawSnakeGame();
+}
+
+function drawSnakeGame(){
+  const canvas=document.getElementById('snakeCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const cell=canvas.width/snakeGrid;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#f8fbff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle='#e6edf6';
+  ctx.lineWidth=1;
+  for(let i=0;i<=snakeGrid;i++){
+    ctx.beginPath();ctx.moveTo(i*cell,0);ctx.lineTo(i*cell,canvas.height);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,i*cell);ctx.lineTo(canvas.width,i*cell);ctx.stroke();
+  }
+  ctx.fillStyle='#d79b49';
+  ctx.beginPath();
+  ctx.arc(snakeFood.x*cell+cell/2,snakeFood.y*cell+cell/2,cell*0.28,0,Math.PI*2);
+  ctx.fill();
+  snake.forEach((s,i)=>{
+    ctx.fillStyle=i===0?'#587aa7':'#8ea7c5';
+    const x=s.x*cell+2,y=s.y*cell+2,w=cell-4,h=cell-4,r=5;
+    ctx.beginPath();
+    if(ctx.roundRect){ctx.roundRect(x,y,w,h,r);}else{ctx.rect(x,y,w,h);}
+    ctx.fill();
+  });
+}
+
+function stopGame(auto=false){
+  if(snakeTimer)clearInterval(snakeTimer);
+  if(snakeLoop)clearInterval(snakeLoop);
+  snakeTimer=null;
+  snakeLoop=null;
+  state.game.lastPlayed=new Date().toISOString();
+  saveState();
+  gameDialog.close();
+  if(auto)alert(`Die ${state.settings.gameMinutes} Minuten sind vorbei. Dein Spielstand wurde gespeichert.`);
+}
+
+function renderSettings(){
+  const prices=state.settings.leisurePrices||{};
+  document.getElementById('settingsView').innerHTML=`
+    <div class="section">
+      <div class="section-head"><h2>⚙️ Einstellungen & Design</h2></div>
+      <div class="card">
+        <h3>Allgemeine Punkte & Belohnungen</h3>
+        <div class="form">
+          <div class="row">
+            <div class="field"><label>Standard-Punkte neue Aufgabe</label><input id="setDefaultTaskPoints" type="number" min="0" value="${state.settings.defaultTaskPoints}"></div>
+            <div class="field"><label>Punkte für Kinderspielzeit</label><input id="setChildGameCost" type="number" min="0" value="${state.settings.childGameCost}"></div>
+          </div>
+          <div class="row">
+            <div class="field"><label>Spielzeit in Minuten</label><input id="setGameMinutes" type="number" min="1" value="${state.settings.gameMinutes}"></div>
+            <div class="field"><label>Standard-Freizeitpreis Erwachsene</label><input id="setDefaultLeisureCost" type="number" min="0" value="${state.settings.defaultLeisureCost}"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3>Freizeitpreise Erwachsene</h3>
+        <div class="mini" style="margin-bottom:10px">Diese Werte sind nur Vorschläge und können jederzeit geändert werden.</div>
+        <div id="leisurePriceRows">
+          ${Object.entries(prices).map(([name,val],i)=>`
+            <div class="row" style="margin-bottom:8px">
+              <div class="field"><label>Freizeitart</label><input class="leisure-name" value="${esc(name)}"></div>
+              <div class="field"><label>Punkte</label><input class="leisure-value" type="number" min="0" value="${val}"></div>
+            </div>`).join('')}
+        </div>
+        <div class="actions">
+          <button class="btn secondary small" onclick="addLeisurePriceRow()">+ Freizeitart</button>
+        </div>
+      </div>
+
+
+      <div class="card" style="margin-top:14px">
+        <h3>Kindertermine: Hinbringen & Abholen</h3>
+        <div class="mini" style="margin-bottom:12px">Für Hinbringen und Abholen gibt es getrennte Wochenregeln. Alle Tage sind frei anpassbar.</div>
+        <label class="toggle"><input id="setAutoDriverTask" type="checkbox" ${state.settings.autoDriverTask?'checked':''}> bei Kinderterminen automatisch Aufgaben für Hinbringen und Abholen erzeugen</label>
+        <div class="field" style="margin-top:10px"><label>Punkte für Fahrdienst-Aufgabe</label><input id="setDriverTaskPoints" type="number" min="0" value="${state.settings.driverTaskPoints||0}"></div>
+        <div class="form" style="margin-top:12px">
+          ${[['1','Montag'],['2','Dienstag'],['3','Mittwoch'],['4','Donnerstag'],['5','Freitag'],['6','Samstag'],['0','Sonntag']].map(([num,name])=>`
+            <div class="row">
+              <div class="field"><label>${name}</label>
+                <select id="resp_${num}">
+                  <option value="">nicht festgelegt</option>
+                  <option value="Kathi" ${state.settings.childResponsibility[num]==='Kathi'?'selected':''}>👩 Kathi</option>
+                  <option value="Julian" ${state.settings.childResponsibility[num]==='Julian'?'selected':''}>👨 Julian</option>
+                </select>
+              </div>
+              <div class="field"><label>Status</label><div class="mini" style="padding-top:10px">${state.settings.childResponsibility[num]?'automatische Zuständigkeit':'manuelle Auswahl'}</div></div>
+            </div>`).join('')}
+        </div>
+
+
+        <div style="margin-top:18px">
+          <div class="title">Standardregel Abholen</div>
+          <div class="form" style="margin-top:10px">
+            ${[['1','Montag'],['2','Dienstag'],['3','Mittwoch'],['4','Donnerstag'],['5','Freitag'],['6','Samstag'],['0','Sonntag']].map(([num,name])=>`
+              <div class="row">
+                <div class="field"><label>${name}</label>
+                  <select id="pickup_${num}">
+                    <option value="">nicht festgelegt</option>
+                    <option value="Kathi" ${state.settings.pickupResponsibility[num]==='Kathi'?'selected':''}>👩 Kathi</option>
+                    <option value="Julian" ${state.settings.pickupResponsibility[num]==='Julian'?'selected':''}>👨 Julian</option>
+                  </select>
+                </div>
+                <div class="field"><label>Status</label><div class="mini" style="padding-top:10px">${state.settings.pickupResponsibility[num]?'automatische Zuständigkeit':'manuelle Auswahl'}</div></div>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <div style="margin-top:18px">
+          <div class="title">Ausnahmen & getauschte Tage – Hinbringen</div>
+          <div class="mini" style="margin:6px 0 10px">Hier kann für ein bestimmtes Datum die Zuständigkeit abweichend vom Wochentagsplan festgelegt werden.</div>
+          <div class="row">
+            <div class="field"><label>Datum</label><input id="overrideDate" type="date"></div>
+            <div class="field"><label>Zuständig</label>
+              <select id="overridePerson">
+                <option value="Kathi">👩 Kathi</option>
+                <option value="Julian">👨 Julian</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn secondary small" onclick="addResponsibilityOverride()">Ausnahme speichern</button>
+          </div>
+          <div id="overrideList" style="margin-top:10px">
+            ${Object.entries(state.settings.responsibilityOverrides||{}).sort((a,b)=>a[0].localeCompare(b[0])).map(([date,p])=>`
+              <div class="item" style="padding:10px;margin-bottom:8px">
+                <div class="item-top">
+                  <div><div class="title">${fmtDate(date)}</div><div class="meta">${esc(labelPerson(p))}</div></div>
+                  <button type="button" class="btn danger small" onclick="removeResponsibilityOverride('${date}')">Entfernen</button>
+                </div>
+              </div>`).join('') || '<div class="empty">Keine Ausnahmen hinterlegt</div>'}
+          </div>
+        </div>
+
+        <div style="margin-top:18px">
+          <div class="title">Ausnahmen & getauschte Tage – Abholen</div>
+          <div class="row" style="margin-top:10px">
+            <div class="field"><label>Datum</label><input id="pickupOverrideDate" type="date"></div>
+            <div class="field"><label>Zuständig</label>
+              <select id="pickupOverridePerson">
+                <option value="Kathi">👩 Kathi</option>
+                <option value="Julian">👨 Julian</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn secondary small" onclick="addPickupOverride()">Ausnahme speichern</button>
+          </div>
+          <div style="margin-top:10px">
+            ${Object.entries(state.settings.pickupOverrides||{}).sort((a,b)=>a[0].localeCompare(b[0])).map(([date,p])=>`
+              <div class="item" style="padding:10px;margin-bottom:8px">
+                <div class="item-top">
+                  <div><div class="title">${fmtDate(date)}</div><div class="meta">${esc(labelPerson(p))}</div></div>
+                  <button type="button" class="btn danger small" onclick="removePickupOverride('${date}')">Entfernen</button>
+                </div>
+              </div>`).join('') || '<div class="empty">Keine Ausnahmen hinterlegt</div>'}
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card" style="margin-top:14px">
+        <h3>Care- & Mental-Load-Punkte</h3>
+        <div class="mini" style="margin-bottom:12px">Auch Planen, Organisieren, Prüfen und Nachhalten zählen als Arbeit und erhalten eigene Punkte.</div>
+        <div class="form">
+          ${Object.entries(state.settings.mentalLoadPoints||{}).map(([type,val])=>`
+            <div class="row">
+              <div class="field"><label>${esc(type)}</label><input id="ml_${type.replaceAll(' ','_')}" type="number" min="0" value="${val}"></div>
+              <div class="field"><label>Beschreibung</label><div class="mini" style="padding-top:10px">${type==='Mental Load'?'Erinnern, Antizipieren, im Kopf behalten':type==='Planung'?'Vorausdenken und planen':type==='Organisation'?'Termine, Buchungen und Abstimmungen':type==='Prüfen'?'Kontrollieren und Bedarf erkennen':type==='Nachbestellen'?'Bedarf erkennen und beschaffen':type==='Nachhalten'?'Rückmeldungen, Fristen und offene Punkte verfolgen':type==='Care'?'emotionale und soziale Sorgearbeit':'konkrete Durchführung'}</div></div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+
+      <div class="card" style="margin-top:14px">
+        <h3>Arbeitsbelastung ausgleichen</h3>
+        <div class="mini" style="margin-bottom:12px">Lange Arbeitstage können automatisch Punkte gutschreiben, damit weniger verfügbare Care-Zeit nicht zu einem unfairen Punkterückstand führt.</div>
+        <label class="toggle"><input id="setWorkCompEnabled" type="checkbox" ${state.settings.workdayCompensation.enabled?'checked':''}> automatischer Ausgleich aktiv</label>
+        <div class="row" style="margin-top:10px">
+          <div class="field"><label>Kathi: langer Arbeitstag ab</label><input id="setWorkThresholdKathi" type="number" min="1" step="0.5" value="${state.settings.workdayCompensation.thresholds?.['Kathi'] ?? 7}"></div>
+          <div class="field"><label>Julian: langer Arbeitstag ab</label><input id="setWorkThresholdJulian" type="number" min="1" step="0.5" value="${state.settings.workdayCompensation.thresholds?.['Julian'] ?? 8}"></div>
+        </div>
+        <div class="field" style="margin-top:10px"><label>Punktgutschrift je langem Arbeitstag</label><input id="setWorkCompPoints" type="number" min="0" value="${state.settings.workdayCompensation.points}"></div>
+        <div class="notice" style="margin-top:10px">Aktueller Startwert: <b>Kathi ab 7 Stunden</b>, <b>Julian ab 8 Stunden</b>, jeweils <b>+5 Punkte</b>. Alle Werte bleiben anpassbar.</div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3>Kategorien verwalten</h3>
+        <div class="mini" style="margin-bottom:12px">Eigene Kategorien können jederzeit ergänzt werden. Die bestehenden Standardkategorien bleiben erhalten.</div>
+        <div class="row">
+          <div class="field"><label>Neue Aufgabenkategorie</label><input id="newTaskCategory" placeholder="z. B. Pflege Angehörige"></div>
+          <div class="field"><label>Neue Terminkategorie</label><input id="newEventCategory" placeholder="z. B. Ehrenamt"></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn secondary small" onclick="addTaskCategory()">+ Aufgabenkategorie</button>
+          <button type="button" class="btn secondary small" onclick="addEventCategory()">+ Terminkategorie</button>
+        </div>
+        <div style="margin-top:12px">
+          <div class="title">Eigene Aufgabenkategorien</div>
+          <div class="chips" style="margin-top:6px">${(state.settings.customTaskCategories||[]).map(c=>`<span class="chip">${esc(c)} <button type="button" onclick="removeTaskCategory('${c.replaceAll("'","&#39;")}')" style="border:0;background:transparent;cursor:pointer">×</button></span>`).join('')||'<span class="mini">noch keine</span>'}</div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="title">Eigene Terminkategorien</div>
+          <div class="chips" style="margin-top:6px">${(state.settings.customEventCategories||[]).map(c=>`<span class="chip">${esc(c)} <button type="button" onclick="removeEventCategory('${c.replaceAll("'","&#39;")}')" style="border:0;background:transparent;cursor:pointer">×</button></span>`).join('')||'<span class="mini">noch keine</span>'}</div>
+        </div>
+      </div>
+
+
+      <div class="card" style="margin-top:14px">
+        <h3>Kinder & Alterslogik</h3>
+        <div class="mini" style="margin-bottom:12px">Das Alter wird automatisch aus dem Geburtsdatum berechnet. Sicherheitsfreigaben einer Aufgabe können Eltern immer überschreiben.</div>
+        ${Object.entries(children).map(([name,c])=>`
+          <div class="item" style="margin-bottom:8px">
+            <div class="item-top">
+              <div><div class="title">${esc(labelPerson(name))}</div><div class="meta">Geboren ${new Date(c.birth+'T12:00:00').toLocaleDateString('de-DE')} · aktuell ${childAge(name)} Jahre</div></div>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>Punktestände manuell anpassen</h3>
+        <div class="form">
+          ${people.map(p=>`
+            <div class="row">
+              <div class="field"><label>${esc(labelPerson(p))}</label><input id="balance_${p.replaceAll(' ','_')}" type="number" min="0" value="${state.pointsByPerson[p]||0}"></div>
+              <div class="field"><label>Hinweis</label><div class="mini" style="padding-top:10px">Manuelle Korrektur jederzeit möglich</div></div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top:14px">
+        <button class="btn" onclick="saveSettings()">Einstellungen speichern</button>
+      </div>
+    </div>`;
+}
+
+function addLeisurePriceRow(){
+  const wrap=document.getElementById('leisurePriceRows');
+  const row=document.createElement('div');
+  row.className='row';
+  row.style.marginBottom='8px';
+  row.innerHTML=`<div class="field"><label>Freizeitart</label><input class="leisure-name" placeholder="z. B. Yoga"></div>
+                 <div class="field"><label>Punkte</label><input class="leisure-value" type="number" min="0" value="10"></div>`;
+  wrap.appendChild(row);
+}
+
+
+function addResponsibilityOverride(){
+  const date=document.getElementById('overrideDate').value;
+  const person=document.getElementById('overridePerson').value;
+  if(!date)return alert('Bitte ein Datum wählen.');
+  state.settings.responsibilityOverrides[date]=person;
+  state.events.filter(e=>e.date===date).forEach(e=>{
+    const existingLinked=linkedTasks(e.id);
+    if(existingLinked.length){
+      const driver=existingLinked.some(t=>['driver','drive','pickup'].includes(t.eventTaskType));
+      const extra=existingLinked.find(t=>t.eventTaskType==='extra');
+      syncEventTasks(e,extra?.title||'',extra?.points||0,driver);
+    }
+  });
+  state.history.push(`Zuständigkeit für ${fmtDate(date)} auf ${person} geändert`);
+  saveState();
+}
+function removeResponsibilityOverride(date){
+  delete state.settings.responsibilityOverrides[date];
+  state.events.filter(e=>e.date===date).forEach(e=>{
+    const existingLinked=linkedTasks(e.id);
+    if(existingLinked.length){
+      const driver=existingLinked.some(t=>['driver','drive','pickup'].includes(t.eventTaskType));
+      const extra=existingLinked.find(t=>t.eventTaskType==='extra');
+      syncEventTasks(e,extra?.title||'',extra?.points||0,driver);
+    }
+  });
+  state.history.push(`Ausnahme für ${fmtDate(date)} entfernt`);
+  saveState();
+}
+
+
+function addPickupOverride(){
+  const date=document.getElementById('pickupOverrideDate').value;
+  const person=document.getElementById('pickupOverridePerson').value;
+  if(!date)return alert('Bitte ein Datum wählen.');
+  state.settings.pickupOverrides[date]=person;
+  state.events.filter(e=>e.date===date).forEach(e=>{
+    const existingLinked=linkedTasks(e.id);
+    if(existingLinked.length){
+      const driver=existingLinked.some(t=>['driver','drive','pickup'].includes(t.eventTaskType));
+      const extra=existingLinked.find(t=>t.eventTaskType==='extra');
+      syncEventTasks(e,extra?.title||'',extra?.points||0,driver);
+    }
+  });
+  state.history.push(`Abholen für ${fmtDate(date)} auf ${person} geändert`);
+  saveState();
+}
+function removePickupOverride(date){
+  delete state.settings.pickupOverrides[date];
+  state.events.filter(e=>e.date===date).forEach(e=>{
+    const existingLinked=linkedTasks(e.id);
+    if(existingLinked.length){
+      const driver=existingLinked.some(t=>['driver','drive','pickup'].includes(t.eventTaskType));
+      const extra=existingLinked.find(t=>t.eventTaskType==='extra');
+      syncEventTasks(e,extra?.title||'',extra?.points||0,driver);
+    }
+  });
+  state.history.push(`Abhol-Ausnahme für ${fmtDate(date)} entfernt`);
+  saveState();
+}
+
+
+function addTaskCategory(){
+  const el=document.getElementById('newTaskCategory');
+  const name=el.value.trim();
+  if(!name)return;
+  if(!state.settings.customTaskCategories.includes(name) && !categoriesTasks.includes(name)){
+    state.settings.customTaskCategories.push(name);
+    state.history.push(`Aufgabenkategorie „${name}“ ergänzt`);
+  }
+  el.value='';saveState();refreshCategorySelects();
+}
+function addEventCategory(){
+  const el=document.getElementById('newEventCategory');
+  const name=el.value.trim();
+  if(!name)return;
+  if(!state.settings.customEventCategories.includes(name) && !categoriesEvents.includes(name)){
+    state.settings.customEventCategories.push(name);
+    state.history.push(`Terminkategorie „${name}“ ergänzt`);
+  }
+  el.value='';saveState();refreshCategorySelects();
+}
+function removeTaskCategory(name){
+  state.settings.customTaskCategories=state.settings.customTaskCategories.filter(c=>c!==name);
+  saveState();refreshCategorySelects();
+}
+function removeEventCategory(name){
+  state.settings.customEventCategories=state.settings.customEventCategories.filter(c=>c!==name);
+  saveState();refreshCategorySelects();
+}
+
+function saveSettings(){
+  state.settings.defaultTaskPoints=Math.max(0,+document.getElementById('setDefaultTaskPoints').value||0);
+  state.settings.childGameCost=Math.max(0,+document.getElementById('setChildGameCost').value||0);
+  state.settings.gameMinutes=Math.max(1,+document.getElementById('setGameMinutes').value||1);
+  state.settings.defaultLeisureCost=Math.max(0,+document.getElementById('setDefaultLeisureCost').value||0);
+
+  const names=[...document.querySelectorAll('.leisure-name')];
+  const vals=[...document.querySelectorAll('.leisure-value')];
+  const prices={};
+  names.forEach((n,i)=>{
+    const name=n.value.trim();
+    if(name)prices[name]=Math.max(0,+vals[i].value||0);
+  });
+  state.settings.leisurePrices=prices;
+  state.settings.workdayCompensation.enabled=document.getElementById('setWorkCompEnabled').checked;
+  state.settings.workdayCompensation.thresholds['Kathi']=Math.max(1,+document.getElementById('setWorkThresholdKathi').value||7);
+  state.settings.workdayCompensation.thresholds['Julian']=Math.max(1,+document.getElementById('setWorkThresholdJulian').value||8);
+  state.settings.workdayCompensation.points=Math.max(0,+document.getElementById('setWorkCompPoints').value||5);
+  Object.keys(state.settings.mentalLoadPoints).forEach(type=>{
+    const el=document.getElementById('ml_'+type.replaceAll(' ','_'));
+    if(el)state.settings.mentalLoadPoints[type]=Math.max(0,+el.value||0);
+  });
+  state.settings.autoDriverTask=document.getElementById('setAutoDriverTask').checked;
+  state.settings.driverTaskPoints=Math.max(0,+document.getElementById('setDriverTaskPoints').value||0);
+  ['0','1','2','3','4','5','6'].forEach(d=>state.settings.childResponsibility[d]=document.getElementById('resp_'+d).value);
+  ['0','1','2','3','4','5','6'].forEach(d=>state.settings.pickupResponsibility[d]=document.getElementById('pickup_'+d).value);
+
+  people.forEach(p=>{
+    const el=document.getElementById('balance_'+p.replaceAll(' ','_'));
+    state.pointsByPerson[p]=Math.max(0,+el.value||0);
+  });
+
+  state.events.forEach(e=>{
+    const existingLinked=linkedTasks(e.id);
+    if(existingLinked.length){
+      const driver=existingLinked.some(t=>['driver','drive','pickup'].includes(t.eventTaskType));
+      const extra=existingLinked.find(t=>t.eventTaskType==='extra');
+      syncEventTasks(e,extra?.title||'',extra?.points||0,driver);
+    }
+  });
+  state.history.push('Punkte-, Belohnungs- und Zuständigkeitseinstellungen geändert');
+  saveState();
+  alert('Einstellungen gespeichert.');
+}
+
+function ensureInitialEventTasks(){
+  state.events.forEach(e=>{
+    if(isChildRelatedEvent(e)&&state.settings.autoDriverTask&&!state.tasks.some(t=>t.linkedEventId===e.id&&t.eventTaskType==='driver')){
+      syncEventTasks(e,'',0,true);
+    }
+  });
+}
+function repeatLabel(r){return {daily:'täglich',weekly:'wöchentlich',monthly:'monatlich'}[r]||r}
+function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+document.getElementById('snakeUp').addEventListener('click',()=>setSnakeDirection(0,-1));
+document.getElementById('snakeDown').addEventListener('click',()=>setSnakeDirection(0,1));
+document.getElementById('snakeLeft').addEventListener('click',()=>setSnakeDirection(-1,0));
+document.getElementById('snakeRight').addEventListener('click',()=>setSnakeDirection(1,0));
+document.addEventListener('keydown',e=>{
+  if(!gameDialog.open)return;
+  if(e.key==='ArrowUp')setSnakeDirection(0,-1);
+  if(e.key==='ArrowDown')setSnakeDirection(0,1);
+  if(e.key==='ArrowLeft')setSnakeDirection(-1,0);
+  if(e.key==='ArrowRight')setSnakeDirection(1,0);
+});
+
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.tab,.view').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(btn.dataset.view).classList.add('active');
+}));
+
+function fillSelect(id, arr){document.getElementById(id).innerHTML=arr.map(x=>`<option>${x}</option>`).join('')}
+refreshCategorySelects();
+document.addEventListener('DOMContentLoaded',()=>{
+  const ls=document.getElementById('librarySearch');
+  const lc=document.getElementById('libraryCategory');
+  if(ls)ls.addEventListener('input',renderLibrary);
+  if(lc)lc.addEventListener('change',renderLibrary);
+});
+ensureInitialEventTasks();saveState();
+</script>
+
+<dialog id="libraryDialog"><div class="modal">
+  <h3>🧺 Care- & Mental-Load-Aufgabensammlung</h3>
+  <div class="mini" style="margin-bottom:12px">
+    Vorlagen für sichtbare Aufgaben und unsichtbare Organisationsarbeit. Eine Vorlage öffnet sich zuerst im Aufgabenformular und kann dort angepasst werden.
+  </div>
+  <div class="row">
+    <div class="field"><label>Suche</label><input id="librarySearch" placeholder="z. B. Zahnarzt, Wäsche, Geschenk, Hühner"></div>
+    <div class="field"><label>Kategorie</label><select id="libraryCategory"><option value="">alle Kategorien</option></select></div>
+  </div>
+  <div id="libraryCount" class="mini" style="margin:10px 0"></div>
+  <div id="libraryList" class="list" style="max-height:58vh;overflow:auto;padding-right:4px"></div>
+  <div class="modal-actions"><button class="btn ghost" onclick="libraryDialog.close()">Schließen</button></div>
+</div></dialog>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(err => console.log('Service Worker:', err));
+  });
+}
+</script>
+
+</body>
+</html>
