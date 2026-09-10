@@ -291,7 +291,7 @@
 </div></dialog>
 
 <script>
-const STORAGE_KEY = 'familienplanner_demo_v19_test_clean';
+const STORAGE_KEY = 'familienplanner_demo_v19_2_erledigung_loeschen';
 const categoriesTasks = ['Haushalt','Bauernhof','Pferde','Schafe','Hühner','Enten','Hasen','Katze','Hund','Garten','Hof','Schule/Kinder','Organisation','Vorstandsarbeit'];
 const categoriesEvents = ['Arbeit','Privat','Kinder','Familie','Sport/Hobby','Bauernhof','Vorstandsarbeit'];
 const careTemplates = [{"id": "care_1", "title": "Wochenspeiseplan erstellen", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_2", "title": "Essenswünsche der Familie abfragen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_3", "title": "Einkaufsliste erstellen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_4", "title": "Lebensmittelvorräte prüfen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_5", "title": "Kühlschrank auf ablaufende Lebensmittel prüfen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_6", "title": "Gefrierschrank-Bestand prüfen", "category": "Haushalt", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_7", "title": "Grundvorräte nachbestellen", "category": "Haushalt", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_8", "title": "Getränkevorrat prüfen und nachbestellen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_9", "title": "Obst und Pausensnacks auffüllen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_10", "title": "Brot / Backwaren organisieren", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Organisation"}, {"id": "care_11", "title": "Abendessen kochen", "category": "Haushalt", "points": 5, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_12", "title": "Mittagessen vorbereiten", "category": "Haushalt", "points": 5, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_13", "title": "Pausenbrote / Vesper vorbereiten", "category": "Schule/Kinder", "points": 4, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_14", "title": "Trinkflaschen füllen", "category": "Schule/Kinder", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_15", "title": "Essensreste verwerten / einplanen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_16", "title": "Leergut wegbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_17", "title": "Spülmaschine einräumen", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_18", "title": "Spülmaschine ausräumen", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_19", "title": "Arbeitsflächen Küche reinigen", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_20", "title": "Herd reinigen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_21", "title": "Backofen reinigen", "category": "Haushalt", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_22", "title": "Kühlschrank reinigen", "category": "Haushalt", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_23", "title": "Mülleimer reinigen", "category": "Haushalt", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_24", "title": "Biomüll rausbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_25", "title": "Restmüll rausbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_26", "title": "Papiermüll rausbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_27", "title": "Gelber Sack / Verpackungen rausbringen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_28", "title": "Müllkalender prüfen", "category": "Organisation", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_29", "title": "Altglas wegbringen", "category": "Haushalt", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_30", "title": "Böden saugen", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_31", "title": "Böden wischen", "category": "Haushalt", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_32", "title": "Bad reinigen", "category": "Haushalt", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_33", "title": "Toiletten reinigen", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_34", "title": "Waschbecken reinigen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_35", "title": "Dusche / Badewanne reinigen", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_36", "title": "Handtücher wechseln", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_37", "title": "Bettwäsche wechseln", "category": "Haushalt", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_38", "title": "Staub wischen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_39", "title": "Fenster putzen", "category": "Haushalt", "points": 8, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_40", "title": "Türklinken / Lichtschalter reinigen", "category": "Haushalt", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_41", "title": "Wäsche sortieren", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_42", "title": "Waschmaschine starten", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_43", "title": "Wäsche aufhängen / Trockner", "category": "Haushalt", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_44", "title": "Wäsche zusammenlegen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_45", "title": "Wäsche in Schränke räumen", "category": "Haushalt", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_46", "title": "Flecken vorbehandeln", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_47", "title": "Kleidung nach Größen prüfen", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_48", "title": "Zu kleine Kinderkleidung aussortieren", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_49", "title": "Fehlende Kleidung nachkaufen", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_50", "title": "Schuhe auf Größe / Zustand prüfen", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_51", "title": "Saisonkleidung vorbereiten", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_52", "title": "Winterkleidung / Schneesachen prüfen", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_53", "title": "Regenkleidung prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_54", "title": "Sportkleidung waschen", "category": "Schule/Kinder", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_55", "title": "Schulranzen prüfen", "category": "Schule/Kinder", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_56", "title": "Hausaufgaben / Schulinfos prüfen", "category": "Schule/Kinder", "points": 3, "repeat": "daily", "urgent": false, "loadType": "Mental Load"}, {"id": "care_57", "title": "Elternbriefe lesen", "category": "Schule/Kinder", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_58", "title": "Schul-App / E-Mails prüfen", "category": "Schule/Kinder", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Mental Load"}, {"id": "care_59", "title": "Unterschriften / Rückläufe erledigen", "category": "Schule/Kinder", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_60", "title": "Klassenkasse / Beiträge überweisen", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_61", "title": "Ausflüge / Projekttage vorbereiten", "category": "Schule/Kinder", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_62", "title": "Schulmaterial nachkaufen", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_63", "title": "Stifte / Kleber / Hefte prüfen", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_64", "title": "Sportbeutel vollständig prüfen", "category": "Schule/Kinder", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_65", "title": "Musik-/Instrumentensachen prüfen", "category": "Schule/Kinder", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_66", "title": "Ferienbetreuung recherchieren", "category": "Schule/Kinder", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_67", "title": "Ferienbetreuung buchen", "category": "Schule/Kinder", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_68", "title": "Betreuungszeiten abstimmen", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_69", "title": "Kindertermine der Woche prüfen", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_70", "title": "Fahrdienste für Kindertermine abstimmen", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_71", "title": "Mitfahrgelegenheiten organisieren", "category": "Schule/Kinder", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Organisation"}, {"id": "care_72", "title": "Kindergeburtstage der Freunde im Blick behalten", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_73", "title": "Arzttermine prüfen / vereinbaren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_74", "title": "Zahnarzt-Kontrollen planen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_75", "title": "U-Untersuchungen / Vorsorge prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_76", "title": "Impfstatus / Impftermine prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_77", "title": "Rezepte rechtzeitig organisieren", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_78", "title": "Apotheke / Hausapotheke auffüllen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_79", "title": "Hausapotheke auf Ablaufdaten prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_80", "title": "Krankenversicherung-Unterlagen ablegen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_81", "title": "Brille / Sehtest-Termine im Blick behalten", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_82", "title": "Friseurtermine Kinder organisieren", "category": "Schule/Kinder", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_83", "title": "Geburtstage des Monats prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_84", "title": "Geschenkideen sammeln", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_85", "title": "Geschenke besorgen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_86", "title": "Geschenke verpacken", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_87", "title": "Geburtstagskarten schreiben", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_88", "title": "Einladungen erstellen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_89", "title": "Einladungen verschicken", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_90", "title": "Rückmeldungen auf Einladungen nachhalten", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_91", "title": "Familienfeiern terminlich koordinieren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_92", "title": "Besuche bei Familie / Freunden planen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_93", "title": "Danksagungen / Rückmeldungen verschicken", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_94", "title": "Rechnungen prüfen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_95", "title": "Rechnungen bezahlen", "category": "Organisation", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_96", "title": "Kontoauszüge / Abbuchungen prüfen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_97", "title": "Versicherungen prüfen", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_98", "title": "Verträge / Kündigungsfristen prüfen", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_99", "title": "Abos prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_100", "title": "Familienbudget aktualisieren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_101", "title": "Taschengeld / Kinderkonto prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_102", "title": "Steuerunterlagen sammeln", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_103", "title": "Garantiebelege / Quittungen ablegen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_104", "title": "Putzmittel-Bestand prüfen", "category": "Haushalt", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_105", "title": "Hygieneartikel nachbestellen", "category": "Haushalt", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_106", "title": "Toilettenpapier / Küchenrolle prüfen", "category": "Haushalt", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_107", "title": "Leuchtmittel / Batterien prüfen", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_108", "title": "Kleine Reparaturen sammeln / priorisieren", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_109", "title": "Handwerkertermine organisieren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_110", "title": "Wartungen / Prüfintervalle im Blick behalten", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_111", "title": "Rauchmelder prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_112", "title": "Feuerlöscher / Erste-Hilfe-Material prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_113", "title": "Fahrzeuge tanken / laden", "category": "Organisation", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_114", "title": "Fahrzeugtermine TÜV / Inspektion prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_115", "title": "Scheibenwaschmittel / Öl prüfen", "category": "Organisation", "points": 2, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_116", "title": "Pferde morgens füttern", "category": "Pferde", "points": 5, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_117", "title": "Pferde abends füttern", "category": "Pferde", "points": 5, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_118", "title": "Pferdetränken kontrollieren", "category": "Pferde", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Prüfen"}, {"id": "care_119", "title": "Pferdekoppel kontrollieren", "category": "Pferde", "points": 3, "repeat": "daily", "urgent": false, "loadType": "Prüfen"}, {"id": "care_120", "title": "Pferdefutter-Bestand prüfen", "category": "Pferde", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_121", "title": "Pferdefutter nachbestellen", "category": "Pferde", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_122", "title": "Schafe füttern", "category": "Schafe", "points": 4, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_123", "title": "Schaftränke kontrollieren", "category": "Schafe", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Prüfen"}, {"id": "care_124", "title": "Weide / Zaun Schafe kontrollieren", "category": "Schafe", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_125", "title": "Hühner morgens füttern", "category": "Hühner", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_126", "title": "Hühner abends versorgen", "category": "Hühner", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_127", "title": "Eier einsammeln", "category": "Hühner", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_128", "title": "Hühnerstall sauber machen", "category": "Hühner", "points": 7, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_129", "title": "Hühnerfutter-Bestand prüfen", "category": "Hühner", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_130", "title": "Enten füttern", "category": "Enten", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_131", "title": "Entenwasser wechseln / prüfen", "category": "Enten", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_132", "title": "Entenbereich reinigen", "category": "Enten", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_133", "title": "Hasen füttern", "category": "Hasen", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_134", "title": "Hasenwasser prüfen", "category": "Hasen", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_135", "title": "Hasenstall reinigen", "category": "Hasen", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_136", "title": "Heu-/Strohbestand prüfen", "category": "Bauernhof", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_137", "title": "Heu / Stroh nachbestellen", "category": "Bauernhof", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_138", "title": "Tierarzttermine im Blick behalten", "category": "Bauernhof", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_139", "title": "Impfungen / Entwurmung Tiere prüfen", "category": "Bauernhof", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_140", "title": "Tiermedikamente / Pflegebedarf prüfen", "category": "Bauernhof", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_141", "title": "Katze füttern", "category": "Katze", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_142", "title": "Katzenklo reinigen", "category": "Katze", "points": 2, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_143", "title": "Katzenfutter nachbestellen", "category": "Katze", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_144", "title": "Hund füttern", "category": "Hund", "points": 2, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_145", "title": " morgens", "category": "Hund", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_146", "title": " abends", "category": "Hund", "points": 3, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_147", "title": "Hundefutter nachbestellen", "category": "Hund", "points": 2, "repeat": "weekly", "urgent": false, "loadType": "Nachbestellen"}, {"id": "care_148", "title": "Zecken-/Flohschutz Hund/Katze prüfen", "category": "Bauernhof", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_149", "title": "Garten gießen", "category": "Garten", "points": 4, "repeat": "daily", "urgent": false, "loadType": "Ausführung"}, {"id": "care_150", "title": "Pflanzen auf Schädlingsbefall prüfen", "category": "Garten", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_151", "title": "Gemüse ernten", "category": "Garten", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_152", "title": "Saatgut / Pflanzenbedarf planen", "category": "Garten", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_153", "title": "Gartengeräte prüfen", "category": "Garten", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_154", "title": "Rasen mähen", "category": "Garten", "points": 6, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_155", "title": "Hof kehren", "category": "Hof", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_156", "title": "Müll / Material im Hof wegräumen", "category": "Hof", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_157", "title": "Winterdienst-Material prüfen", "category": "Hof", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_158", "title": "Schnee räumen / streuen", "category": "Hof", "points": 7, "repeat": "daily", "urgent": true, "loadType": "Ausführung"}, {"id": "care_159", "title": "Ferientermine im Kalender eintragen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_160", "title": "Urlaub grob planen", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_161", "title": "Unterkunft buchen", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_162", "title": "Packliste erstellen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_163", "title": "Reisedokumente prüfen", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_164", "title": "Reiseapotheke prüfen", "category": "Organisation", "points": 3, "repeat": "monthly", "urgent": false, "loadType": "Prüfen"}, {"id": "care_165", "title": "Haustierbetreuung für Urlaub organisieren", "category": "Bauernhof", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_166", "title": "Ferien-/Urlaubsübergabe Haus und Tiere planen", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_167", "title": "Weihnachtsgeschenke planen", "category": "Organisation", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_168", "title": "Advent / Feiertage terminlich koordinieren", "category": "Organisation", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_169", "title": "Ostern / Feiertage vorbereiten", "category": "Organisation", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_170", "title": "Schuljahresstart vorbereiten", "category": "Schule/Kinder", "points": 7, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_171", "title": "Schuljahresende / Zeugnisse / Materialien organisieren", "category": "Schule/Kinder", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_172", "title": "Familienwoche gemeinsam durchsprechen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_173", "title": "Konflikte / offene Themen in der Familie ansprechen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Care"}, {"id": "care_174", "title": "Zeit für jedes Kind individuell einplanen", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Care"}, {"id": "care_175", "title": "Besondere Belastungen der Kinder im Blick behalten", "category": "Schule/Kinder", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_176", "title": "Kontakt zu Schule / Lehrkräften bei Bedarf aufnehmen", "category": "Schule/Kinder", "points": 4, "repeat": "monthly", "urgent": false, "loadType": "Organisation"}, {"id": "care_177", "title": "Freundschaften / soziale Termine der Kinder im Blick behalten", "category": "Schule/Kinder", "points": 3, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_178", "title": "Familienkalender der kommenden 14 Tage prüfen", "category": "Organisation", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_179", "title": "Terminkollisionen frühzeitig klären", "category": "Organisation", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_180", "title": "Arbeitskalender mit Familienkalender abgleichen", "category": "Organisation", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_181", "title": "Verantwortlichkeiten für kommende Woche verteilen", "category": "Organisation", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Planung"}, {"id": "care_182", "title": "Vorstandstermine der Woche prüfen", "category": "Vorstandsarbeit", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}, {"id": "care_183", "title": "Vorstandsmails bearbeiten", "category": "Vorstandsarbeit", "points": 4, "repeat": "weekly", "urgent": false, "loadType": "Ausführung"}, {"id": "care_184", "title": "Offene Vorstandspunkte nachhalten", "category": "Vorstandsarbeit", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_185", "title": "Unterlagen für Vorstandssitzung vorbereiten", "category": "Vorstandsarbeit", "points": 6, "repeat": "monthly", "urgent": false, "loadType": "Planung"}, {"id": "care_186", "title": "Beschlüsse / To-dos aus Vorstandssitzung übertragen", "category": "Vorstandsarbeit", "points": 5, "repeat": "monthly", "urgent": false, "loadType": "Nachhalten"}, {"id": "care_187", "title": "Fristen aus Vorstandsarbeit prüfen", "category": "Vorstandsarbeit", "points": 5, "repeat": "weekly", "urgent": false, "loadType": "Mental Load"}];
@@ -506,6 +506,17 @@ function loadState(){
   s.tasks.forEach(t=>{t.owner='';});
   s.tasks.forEach(t=>{if(!t.loadType)t.loadType='Ausführung';});
   s.events.forEach(e=>{if(!e.wishlist)e.wishlist=[];if(!e.compensatedAdults)e.compensatedAdults=[];if(e.workHours==null)e.workHours=0;});
+
+  s.tasks.forEach(t=>{
+    if(!Array.isArray(t.completions))t.completions=[];
+    if(t.done && t.completedAt){
+      const legacyPeople=Array.isArray(t.completedBy)?t.completedBy:[t.completedBy||'Kathi'];
+      const duplicate=t.completions.some(c=>c.at===t.completedAt);
+      if(!duplicate)t.completions.push({id:'legacy_'+t.id,at:t.completedAt,people:legacyPeople,points:Number(t.points||0),comment:'übernommen aus früherer Version'});
+    }
+    t.done=false;
+  });
+
   return s;
 }
 
@@ -539,7 +550,8 @@ function ensureBirthdayEvents(){
     }
   });
 }
-const plannedRoutineDefs=[
+const plannedRoutineDefs=[{key:'dog_garden_pooh',title:'Hundekacke im Garten aufsammeln',category:'Hund',points:3,kind:'weekly',weekday:6,time:'11:00',label:'wöchentlich',minAge:9,supervision:'help'},
+  
   // Aufräumen & Hof ergänzend
   {key:'clean_room',title:'Zimmer aufräumen',category:'Haushalt',points:3,kind:'weekly',weekday:6,time:'10:00',label:'wöchentlich',minAge:6,supervision:'alone'},
   {key:'clean_living',title:'Wohnzimmer aufräumen',category:'Haushalt',points:3,kind:'weekly',weekday:6,time:'10:15',label:'wöchentlich',minAge:6,supervision:'help'},
@@ -704,7 +716,7 @@ function addRoutineOccurrence(def,date){
   if((state.settings.disabledRoutines||[]).includes(def.key))return;
   const occurrence=`${def.key}_${date}`;
   if(state.tasks.some(t=>t.routineOccurrence===occurrence))return;
-  state.tasks.push({id:uid(),title:def.title,category:def.category,points:def.points,date,time:def.time||'',repeat:'none',type:'normal',urgent:!!def.urgent,done:false,shifted:false,note:'Voreingestellte Routine – manuell anpassbar',owner:'',minAge:def.minAge??18,difficulty:(def.minAge??18)>=18?'medium':'easy',supervision:def.supervision||'adultOnly',loadType:def.loadType||'Ausführung',routineKey:def.key,routineOccurrence:occurrence,scheduleLabel:def.label||'regelmäßig'});
+  state.tasks.push({id:uid(),title:def.title,category:def.category,points:def.points,date,time:def.time||'',repeat:'none',type:'normal',urgent:!!def.urgent,done:false,shifted:false,note:'Voreingestellte Routine – manuell anpassbar',owner:'',minAge:def.minAge??18,difficulty:(def.minAge??18)>=18?'medium':'easy',supervision:def.supervision||'adultOnly',loadType:def.loadType||'Ausführung',routineKey:def.key,routineOccurrence:occurrence,scheduleLabel:def.label||'regelmäßig',completions:[]});
 }
 function ensurePlannedRoutines(){
   if(!state.routineLibrary)state.routineLibrary=[];
@@ -749,61 +761,87 @@ function renderAll(){renderNotifications();renderToday();renderTasks();renderBon
 
 
 function openQuickTask(){
-  quickTaskTitle.value='';
-  quickTaskPoints.value=state.settings.defaultTaskPoints||3;
-  quickTaskCategory.innerHTML=categoriesTasks().map(c=>`<option>${esc(c)}</option>`).join('');
-  quickTaskPeople.innerHTML=people.map(p=>`<label class="chip"><input type="checkbox" name="quickDoneBy" value="${esc(p)}"> ${esc(labelPerson(p))}</label>`).join('');
-  const cb=document.querySelector(`input[name="quickDoneBy"][value="${currentUser()}"]`);
+  const dlg=document.getElementById('quickTaskDialog');
+  const title=document.getElementById('quickTaskTitle');
+  const points=document.getElementById('quickTaskPoints');
+  const category=document.getElementById('quickTaskCategory');
+  const peopleBox=document.getElementById('quickTaskPeople');
+  const saveTpl=document.getElementById('quickTaskSaveTemplate');
+  if(!dlg||!title||!points||!category||!peopleBox||!saveTpl){
+    alert('Schnellzugriff konnte nicht geöffnet werden.');
+    return;
+  }
+  title.value='';
+  points.value=state.settings.defaultTaskPoints||3;
+  category.innerHTML=categoriesTasks().map(c=>`<option>${esc(c)}</option>`).join('');
+  peopleBox.innerHTML=people.map(p=>`<label class="chip"><input type="checkbox" name="quickDoneBy" value="${esc(p)}"> ${esc(labelPerson(p))}</label>`).join('');
+  const cb=peopleBox.querySelector(`input[name="quickDoneBy"][value="${currentUser()}"]`);
   if(cb)cb.checked=true;
-  quickTaskSaveTemplate.checked=true;
-  quickTaskDialog.showModal();
+  saveTpl.checked=true;
+  dlg.showModal();
 }
 function saveQuickTask(){
-  const title=quickTaskTitle.value.trim();
+  const dlg=document.getElementById('quickTaskDialog');
+  const titleEl=document.getElementById('quickTaskTitle');
+  const pointsEl=document.getElementById('quickTaskPoints');
+  const catEl=document.getElementById('quickTaskCategory');
+  const saveTpl=document.getElementById('quickTaskSaveTemplate');
+
+  const title=(titleEl?.value||'').trim();
   if(!title)return alert('Bitte eine Aufgabe eingeben.');
   const performers=Array.from(document.querySelectorAll('input[name="quickDoneBy"]:checked')).map(x=>x.value);
   if(!performers.length)return alert('Bitte mindestens eine Person auswählen.');
-  const pts=Number(quickTaskPoints.value||0);
+
+  const pts=Number(pointsEl?.value||0);
   performers.forEach(p=>state.pointsByPerson[p]=Number(state.pointsByPerson[p]??0)+pts);
-  const task={
+
+  let task=state.tasks.find(t=>t.title.trim().toLowerCase()===title.toLowerCase() && t.type==='normal');
+  if(!task){
+    task={
+      id:uid(),
+      title,
+      category:catEl?.value||'Haushalt',
+      points:pts,
+      date:todayISO(),
+      time:'',
+      repeat:'none',
+      type:'normal',
+      urgent:false,
+      done:false,
+      shifted:false,
+      owner:'',
+      loadType:'Ausführung',
+      minAge:0,
+      difficulty:'easy',
+      supervision:'alone',
+      completions:[]
+    };
+    state.tasks.push(task);
+  }
+
+  taskCompletions(task).push({
     id:uid(),
-    title,
-    category:quickTaskCategory.value||'Haushalt',
+    at:new Date().toISOString(),
+    people:performers.slice(),
     points:pts,
-    date:todayISO(),
-    time:'',
-    repeat:'none',
-    type:'normal',
-    urgent:false,
-    done:true,
-    shifted:false,
-    completedBy:performers,
-    completedAt:new Date().toISOString(),
-    owner:'',
-    loadType:'Ausführung',
-    minAge:0,
-    difficulty:'easy',
-    supervision:'alone'
-  };
-  state.tasks.push(task);
-  if(quickTaskSaveTemplate.checked)addUserTemplateFromTask(task);
+    comment:'Schnellerfassung'
+  });
+
+  if(saveTpl?.checked)addUserTemplateFromTask(task);
   state.history.push(`${performers.join(' + ')}: „${title}“ als andere Aufgabe erledigt (je +${pts} Punkte)`);
-  quickTaskDialog.close();
+  if(dlg)dlg.close();
   saveState();
 }
 
 function renderToday(){
   const today=todayISO();
   const allToday=state.tasks.filter(t=>t.type==='normal'&&t.date===today).sort(taskSort);
-  const open=allToday.filter(t=>!t.done);
-  const done=allToday.filter(t=>t.done);
+  const todaysCompletions=allToday.flatMap(t=>completionsToday(t).map(c=>({task:t,completion:c})));
   const events=state.events.filter(e=>e.date===today).sort((a,b)=>a.start.localeCompare(b.start));
-  const pct=allToday.length?Math.round(done.length/allToday.length*100):100;
   document.getElementById('todayView').innerHTML=`
     <div class="hero"><h1>${greeting()} 👋</h1><p>${new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'})}</p>
-      <div class="score">Heute: ${done.length}/${allToday.length} erledigt · ${pct}%</div>
-      <div class="mini" style="color:#fff;opacity:.95;margin-top:4px">${open.length} offen · ${done.length} erledigt</div>
-      <div class="progress" style="margin-top:10px;background:rgba(255,255,255,.28)"><div style="width:${pct}%"></div></div>
+      <div class="score">${allToday.length} Aufgaben heute</div>
+      <div class="mini" style="color:#fff;opacity:.95;margin-top:4px">${todaysCompletions.length} Erledigungen heute</div>
     </div>
     <div class="card" style="margin-top:14px">
       <div class="section-head" style="margin-bottom:8px"><h3>⭐ Punktestände</h3></div>
@@ -812,27 +850,80 @@ function renderToday(){
       </div>
     </div>
     <div class="grid">
-      <div class="card"><h3>⏳ Noch offen (${open.length})</h3>${open.length?open.map(taskHTML).join(''):'<div class="empty">Alles für heute erledigt 🎉</div>'}</div>
-      <div class="card"><h3>✅ Heute erledigt (${done.length})</h3>${done.length?done.slice().reverse().map(t=>`<div class="item"><div class="title">${esc(t.title)}</div><div class="meta">${esc(Array.isArray(t.completedBy)?t.completedBy.map(labelPerson).join(' + '):labelPerson(t.completedBy||'Kathi'))} hat/haben erledigt</div></div>`).join(''):'<div class="empty">Heute noch nichts erledigt</div>'}</div>
+      <div class="card"><h3>📋 Aufgaben heute (${allToday.length})</h3>${allToday.length?allToday.map(taskHTML).join(''):'<div class="empty">Heute keine Aufgaben</div>'}</div>
+      <div class="card"><h3>✅ Heute erledigt (${todaysCompletions.length})</h3>${todaysCompletions.length?todaysCompletions.slice().reverse().map(x=>`<div class="item"><div class="item-top"><div><div class="title">${esc(x.task.title)}</div><div class="meta">${esc((x.completion.people||[]).map(labelPerson).join(' + '))} · je +${Number(x.completion.points||0)} P</div></div><button type="button" class="btn ghost small" onclick="deleteCompletion('${x.task.id}','${x.completion.id}')">↶</button></div></div>`).join(''):'<div class="empty">Heute noch nichts erledigt</div>'}</div>
     </div>
     <div class="card" style="margin-top:14px"><h3>📅 Termine heute</h3>${events.length?events.map(eventHTML).join(''):'<div class="empty">Heute keine Termine</div>'}</div>
     <div class="section"><div class="section-head"><h2>Schnellzugriff</h2></div><div class="actions">
-      <button class="btn" onclick="openTask()">+ Aufgabe</button><button class="btn secondary" onclick="openEvent()">+ Termin</button><button class="btn secondary" onclick="openQuickTask()">+ Andere Aufgabe erledigt</button>
+      <button class="btn" onclick="openTask()">+ Aufgabe</button>
+      <button class="btn secondary" onclick="openEvent()">+ Termin</button>
+      <button class="btn secondary" onclick="openQuickTask()">+ Andere Aufgabe erledigt</button>
     </div></div>`;
 }
 function greeting(){const h=new Date().getHours();return h<11?'Guten Morgen':h<18?'Hallo':'Guten Abend'}
 
+
+
+function deleteCompletion(taskId,completionId){
+  const t=state.tasks.find(x=>x.id===taskId);
+  if(!t)return;
+  const cs=taskCompletions(t);
+  const c=cs.find(x=>x.id===completionId);
+  if(!c)return;
+  const peopleDone=c.people||[];
+  const pts=Number(c.points||0);
+  const names=peopleDone.join(' + ')||'unbekannt';
+  if(!confirm(`Erledigung von „${t.title}“ durch ${names} wirklich löschen? Die vergebenen Punkte werden zurückgebucht.`))return;
+
+  peopleDone.forEach(p=>{
+    state.pointsByPerson[p]=Number(state.pointsByPerson[p]??0)-pts;
+  });
+
+  t.completions=cs.filter(x=>x.id!==completionId);
+  state.history.push(`Erledigung gelöscht: „${t.title}“ · ${names} · je ${pts} Punkte zurückgebucht`);
+  saveState();
+}
+
+function taskCompletions(t){
+  if(!Array.isArray(t.completions))t.completions=[];
+  return t.completions;
+}
+function completionsToday(t){
+  const today=todayISO();
+  return taskCompletions(t).filter(c=>(c.at||'').slice(0,10)===today);
+}
+function completionsForPeriod(t,period){
+  return taskCompletions(t).filter(c=>{
+    const d=(c.at||'').slice(0,10);
+    const probe={date:d};
+    return d && inTaskPeriod(probe,period);
+  });
+}
+function completionSummary(t,period='today'){
+  const cs=period==='today'?completionsToday(t):completionsForPeriod(t,period);
+  if(!cs.length)return '';
+  const names=[...new Set(cs.flatMap(c=>c.people||[]))];
+  return `${cs.length}× erledigt${names.length?` · ${names.join(', ')}`:''}`;
+}
+
 function taskHTML(t){
   const cadence=t.scheduleLabel||repeatLabel(t.repeat||'none');
+  const cs=completionsToday(t);
+  const summary=cs.length?` · ${cs.length}× heute`:'';
   return `<div class="item compact-task" style="padding:10px 12px">
     <div style="display:flex;align-items:center;gap:10px;justify-content:space-between;min-width:0">
       <div style="min-width:0;flex:1">
         <div class="title" style="font-size:.98rem">${esc(t.title)}</div>
-        <div class="meta">⭐ ${Number(t.points||0)} · ${esc(cadence)} · ${t.urgent?'nicht aufschiebbar':'aufschiebbar'}</div>
+        <div class="meta">⭐ ${Number(t.points||0)} · ${esc(cadence)} · ${t.urgent?'nicht aufschiebbar':'aufschiebbar'}${summary}</div>
+        ${cs.length?`<div style="margin-top:6px">${cs.map(c=>`
+          <div class="mini" style="display:flex;align-items:center;gap:6px;justify-content:space-between;margin-top:3px">
+            <span>✓ ${esc((c.people||[]).join(' + '))} · je +${Number(c.points||0)} P</span>
+            <button type="button" class="btn ghost small" onclick="deleteCompletion('${t.id}','${c.id}')" title="Erledigung löschen">↶</button>
+          </div>`).join('')}</div>`:''}
       </div>
       <div class="actions" style="margin:0;gap:6px;flex-wrap:nowrap">
-        ${!t.done?`<button class="btn small" onclick="openDone('${t.id}')">✓</button>`:`<span class="chip">✓ ${esc(Array.isArray(t.completedBy)?t.completedBy.join(' + '):(t.completedBy||'erledigt'))}</span>`}
-        ${!t.done&&!t.urgent&&!t.shifted?`<button class="btn secondary small" onclick="openShift('${t.id}')">↪</button>`:''}
+        <button class="btn small" onclick="openDone('${t.id}')">✓</button>
+        ${!t.urgent&&!t.shifted?`<button class="btn secondary small" onclick="openShift('${t.id}')">↪</button>`:''}
         <button class="btn ghost small" onclick="openTask('${t.id}')">✎</button>
       </div>
     </div>
@@ -869,15 +960,13 @@ function periodTitle(p){return {today:'Aufgaben heute',week:'Aufgaben diese Woch
 function renderTasks(){
   ensurePlannedRoutines();
   const all=state.tasks.filter(t=>t.type==='normal'&&inTaskPeriod(t,taskPeriod)).sort(taskSort);
-  const open=all.filter(t=>!t.done),done=all.filter(t=>t.done);
   document.getElementById('tasksView').innerHTML=`<div class="section">
     <div class="section-head"><h2>${periodTitle(taskPeriod)}</h2><div class="actions"><button class="btn secondary" onclick="openLibrary()">🧺 Sammlung</button><button class="btn" onclick="openTask()">+ Aufgabe</button></div></div>
     <div class="actions" style="margin-bottom:12px">
       ${[['today','Heute'],['week','Diese Woche'],['month','Dieser Monat'],['year','Dieses Jahr']].map(([k,l])=>`<button class="btn ${taskPeriod===k?'':'secondary'} small" onclick="setTaskPeriod('${k}')">${l}</button>`).join('')}
     </div>
-    <div class="mini" style="margin-bottom:8px">${open.length} offen · ${done.length} erledigt</div>
-    <div class="list">${open.length?open.map(taskHTML).join(''):'<div class="empty">Keine offenen Aufgaben in diesem Zeitraum</div>'}</div>
-    ${done.length?`<details style="margin-top:14px"><summary>✅ Erledigt (${done.length})</summary><div class="list" style="margin-top:8px">${done.map(taskHTML).join('')}</div></details>`:''}
+    <div class="mini" style="margin-bottom:8px">${all.length} Aufgaben · jede Aufgabe kann mehrfach erledigt werden</div>
+    <div class="list">${all.length?all.map(taskHTML).join(''):'<div class="empty">Keine Aufgaben in diesem Zeitraum</div>'}</div>
   </div>`;
 }
 function renderBonus(){
@@ -934,20 +1023,17 @@ function renderCalendar(){
 }
 
 function renderCareAnalytics(){
-  const doneTasks=state.tasks.filter(t=>t.done);
-  const types=[...new Set(doneTasks.map(t=>t.loadType||'Ausführung'))];
-  if(!doneTasks.length)return '<div class="empty">Noch keine erledigten Care-Aufgaben</div>';
+  const completionRows=state.tasks.flatMap(t=>taskCompletions(t).map(c=>({task:t,completion:c})));
+  if(!completionRows.length)return '<div class="empty">Noch keine erledigten Care-Aufgaben</div>';
+  const types=[...new Set(completionRows.map(x=>x.task.loadType||'Ausführung'))];
   const byPerson=people.map(p=>{
-    const mine=doneTasks.filter(t=>{
-      const completed=t.completedBy||t.owner;
-      return Array.isArray(completed)?completed.includes(p):completed===p;
-    });
-    const pts=mine.reduce((sum,t)=>sum+(t.points||0),0);
+    const mine=completionRows.filter(x=>(x.completion.people||[]).includes(p));
+    const pts=mine.reduce((sum,x)=>sum+Number(x.completion.points||0),0);
     return `<div class="item" style="padding:10px;margin-bottom:8px">
       <div class="item-top"><div><div class="title">${esc(labelPerson(p))}</div>
-      <div class="meta">${mine.length} erledigte Aufgaben · ${pts} Punkte</div></div></div>
+      <div class="meta">${mine.length} Erledigungen · ${pts} Punkte</div></div></div>
       <div class="chips">${types.map(type=>{
-        const n=mine.filter(t=>(t.loadType||'Ausführung')===type).length;
+        const n=mine.filter(x=>(x.task.loadType||'Ausführung')===type).length;
         return n?`<span class="chip">${esc(type)}: ${n}</span>`:'';
       }).join('')}</div>
     </div>`;
@@ -1207,7 +1293,7 @@ function saveTask(){
     supervision:taskSupervision.value,
     done:false,
     shifted:false,
-    seriesId:existing?.seriesId||((taskRepeat.value!=='none'&&!existing?.routineKey)?uid():undefined)
+    seriesId:existing?.seriesId||((taskRepeat.value!=='none'&&!existing?.routineKey)?uid():undefined),completions:existing?.completions||[]
   };
   if(existing){
     obj.done=existing.done;
@@ -1515,29 +1601,53 @@ function confirmDone(){
   const t=state.tasks.find(t=>t.id===activeTaskId);if(!t)return;
   const performers=Array.from(document.querySelectorAll('input[name="doneByTeam"]:checked')).map(cb=>cb.value);
   if(!performers.length)return alert('Bitte mindestens eine Person bei „Erledigt durch“ auswählen.');
-  t.done=true;
-  t.completedBy=performers;
-  t.completedAt=new Date().toISOString();
+
   const pts=Number(t.points||0);
   performers.forEach(p=>{
     state.pointsByPerson[p]=Number(state.pointsByPerson[p]??0)+pts;
   });
-  state.history.push(`${performers.join(' + ')}: „${t.title}“ erledigt (je +${pts} Punkte)${doneComment.value.trim()?` – ${doneComment.value.trim()}`:''}`);
+
+  const entry={
+    id:uid(),
+    at:new Date().toISOString(),
+    people:performers.slice(),
+    points:pts,
+    comment:doneComment.value.trim()
+  };
+  taskCompletions(t).push(entry);
+
+  // Legacy fields retained only for compatibility
+  t.completedBy=performers.slice();
+  t.completedAt=entry.at;
+  t.done=false;
+
+  state.history.push(`${performers.join(' + ')}: „${t.title}“ erledigt (je +${pts} Punkte)${entry.comment?` – ${entry.comment}`:''}`);
+
   if(followToggle.checked&&followTitle.value.trim()){
-    state.tasks.push({id:uid(),title:followTitle.value.trim(),category:t.category,points:+followPoints.value||0,date:followDate.value||plusDays(todayISO(),1),time:'',repeat:'none',type:'normal',urgent:false,done:false,shifted:false,note:`Folgeaufgabe aus „${t.title}“`,owner:'',minAge:t.minAge??0,difficulty:t.difficulty||'easy',supervision:t.supervision||'alone',loadType:t.loadType||'Ausführung'});
+    state.tasks.push({
+      id:uid(),
+      title:followTitle.value.trim(),
+      category:t.category,
+      points:+followPoints.value||0,
+      date:followDate.value||plusDays(todayISO(),1),
+      time:'',
+      repeat:'none',
+      type:'normal',
+      urgent:false,
+      done:false,
+      shifted:false,
+      note:`Folgeaufgabe aus „${t.title}“`,
+      owner:'',
+      minAge:t.minAge??0,
+      difficulty:t.difficulty||'easy',
+      supervision:t.supervision||'alone',
+      loadType:t.loadType||'Ausführung',
+      completions:[]
+    });
   }
-  if(t.repeat!=='none'&&!t.routineKey){
-    let d=new Date(t.date+'T12:00:00');
-    if(t.repeat==='daily')d.setDate(d.getDate()+1);
-    if(t.repeat==='weekly')d.setDate(d.getDate()+7);
-    if(t.repeat==='monthly')d.setMonth(d.getMonth()+1);
-    if(t.repeat==='quarterly')d.setMonth(d.getMonth()+3);
-    if(t.repeat==='yearly')d.setFullYear(d.getFullYear()+1);
-    const copy={...t,id:uid(),date:d.toISOString().slice(0,10),done:false,shifted:false,owner:''};
-    delete copy.completedBy;delete copy.completedAt;
-    state.tasks.push(copy);
-  }
-  doneDialog.close();saveState();
+
+  doneDialog.close();
+  saveState();
 }
 
 function openShift(id){
